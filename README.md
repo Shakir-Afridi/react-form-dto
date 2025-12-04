@@ -8,7 +8,7 @@ This library lets you define forms declaratively using JSON DTOs (`FormDTO`, `Se
 ## ✨ Features
 
 - **DTO-driven**: Define forms entirely in JSON/TypeScript objects.
-- **Material UI integration**: Uses MUI v6 components for consistent design and accessibility.
+- **Material UI integration**: Uses MUI v7 components for consistent design and accessibility.
 - **Responsive grid layout**: 12-column system mapped to MUI’s `Grid` with `size` props.
 - **Conditional rendering**: Show/hide fields or sections based on other field values.
 - **Custom renderers**: Override default MUI inputs with your own components.
