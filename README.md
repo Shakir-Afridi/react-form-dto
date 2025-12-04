@@ -1,73 +1,44 @@
-# React + TypeScript + Vite
+# React Form DTO
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A **dynamic, DTO-driven form builder** built with **React, TypeScript, and Material UI (MUI v6)**.  
+This library lets you define forms declaratively using JSON DTOs (`FormDTO`, `SectionDTO`, `FieldDTO`) and automatically renders responsive, accessible forms with MUI components.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨ Features
 
-## React Compiler
+- **DTO-driven**: Define forms entirely in JSON/TypeScript objects.
+- **Material UI integration**: Uses MUI v6 components for consistent design and accessibility.
+- **Responsive grid layout**: 12-column system mapped to MUI’s `Grid` with `size` props.
+- **Conditional rendering**: Show/hide fields or sections based on other field values.
+- **Custom renderers**: Override default MUI inputs with your own components.
+- **TypeScript support**: Strongly typed DTOs for safety and autocompletion.
+- **Composable architecture**: `FormBuilder`, `Section`, and `Field` components.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 📦 Installation
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Clone the repo and install dependencies:
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+git clone https://github.com/your-username/react-form-dto.git
+cd react-form-dto
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🤝 Contributing
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- Fork the repo
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- Create a feature branch (git checkout -b feature/my-feature)
+
+- Commit changes (git commit -m "Add my feature")
+
+- Push to branch (git push origin feature/my-feature)
+
+- Open a Pull Request
+
+## 📜 License
+
+MIT License © 2025 Shakir Ullah
