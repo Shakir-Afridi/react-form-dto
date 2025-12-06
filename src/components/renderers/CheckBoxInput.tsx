@@ -1,5 +1,5 @@
 import type { FieldRendererProps } from "@components/Field";
-import { Checkbox, FormControlLabel } from "@mui/material";
+import { Checkbox, FormControlLabel, Typography } from "@mui/material";
 
 /**
  * Checkbox input renderer for boolean/checkbox field types.
@@ -19,17 +19,25 @@ export default function CheckBoxInput({
     field,
     value,
     onChange,
+    error,
 }: FieldRendererProps) {
     return (
-        <FormControlLabel
-            control={
-                <Checkbox
-                    checked={!!value}
-                    onChange={(e) => onChange(e.target.checked)}
-                    disabled={field.disabled}
-                />
-            }
-            label={field.label}
-        />
+        <>
+            <FormControlLabel
+                control={
+                    <Checkbox
+                        checked={!!value}
+                        onChange={(e) => onChange(e.target.checked)}
+                        disabled={field.disabled}
+                    />
+                }
+                label={field.label}
+            />
+            {error && (
+                <Typography variant="caption" color="error">
+                    {error}
+                </Typography>
+            )}
+        </>
     );
 }

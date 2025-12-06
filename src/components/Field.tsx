@@ -3,6 +3,7 @@ import type { FieldDTO } from "@types";
 import SelectInput from "./renderers/SelectInput";
 import TextInput from "./renderers/TextInput";
 import CheckBoxInput from "./renderers/CheckBoxInput";
+import { AutoCompleteField } from "./renderers/AutoComplete";
 
 /**
  * Props passed to field renderer components.
@@ -14,6 +15,7 @@ export type FieldRendererProps = {
     value: any;
     /** Callback function to update the field value */
     onChange: (val: any) => void;
+    error?: string | null;
 };
 
 /**
@@ -41,17 +43,37 @@ const DefaultRenderer: React.FC<FieldRendererProps> = ({
     field,
     value,
     onChange,
+    error,
 }) => {
     switch (field.type) {
         case "text":
         case "date":
         case "number":
             return (
-                <TextInput field={field} value={value} onChange={onChange} />
+                <TextInput
+                    field={field}
+                    value={value}
+                    onChange={onChange}
+                    error={error}
+                />
             );
         case "select":
             return (
-                <SelectInput field={field} value={value} onChange={onChange} />
+                <SelectInput
+                    field={field}
+                    value={value}
+                    onChange={onChange}
+                    error={error}
+                />
+            );
+        case "autocomplete":
+            return (
+                <AutoCompleteField
+                    field={field}
+                    value={value}
+                    onChange={onChange}
+                    error={error}
+                />
             );
         case "checkbox":
             return (
@@ -59,6 +81,7 @@ const DefaultRenderer: React.FC<FieldRendererProps> = ({
                     field={field}
                     value={value}
                     onChange={onChange}
+                    error={error}
                 />
             );
         default:

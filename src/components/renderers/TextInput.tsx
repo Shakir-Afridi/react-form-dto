@@ -19,6 +19,7 @@ export default function TextInput({
     field,
     value,
     onChange,
+    error,
 }: FieldRendererProps) {
     return (
         <TextField
@@ -35,6 +36,8 @@ export default function TextInput({
                     shrink: field.type === "date" ? true : undefined,
                 },
             }}
+            error={!!error}
+            helperText={error}
         />
     );
 }

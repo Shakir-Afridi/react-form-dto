@@ -1,5 +1,11 @@
 import type { FieldRendererProps } from "@components/Field";
-import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import {
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Select,
+    Typography,
+} from "@mui/material";
 
 /**
  * Select input renderer for dropdown/select field types.
@@ -19,6 +25,7 @@ export default function SelectInput({
     field,
     value,
     onChange,
+    error,
 }: FieldRendererProps) {
     return (
         <FormControl fullWidth>
@@ -29,6 +36,7 @@ export default function SelectInput({
                 id={field.id}
                 onChange={(e) => onChange(e.target.value)}
                 label={field.label}
+                error={!!error}
             >
                 {field.options?.map((opt) => (
                     <MenuItem key={opt} value={opt}>
@@ -36,6 +44,11 @@ export default function SelectInput({
                     </MenuItem>
                 ))}
             </Select>
+            {error && (
+                <Typography variant="caption" color="error">
+                    {error}
+                </Typography>
+            )}
         </FormControl>
     );
 }
