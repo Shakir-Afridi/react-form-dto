@@ -3,7 +3,7 @@ import { defineConfig } from "vitepress";
 export default defineConfig({
     title: "React Form DTO",
     description: "DTO-driven form builder with MUI and validation",
-    base: "/react-form-dto/",
+    base: "/react-form-dto",
     themeConfig: {
         nav: [
             { text: "Guide", link: "/guide/getting-started" },
