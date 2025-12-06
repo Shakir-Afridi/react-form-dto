@@ -27,7 +27,6 @@ export type FieldDTO = {
     label: string;
     placeholder?: string;
     options?: string[];
-    required?: boolean;
     rows?: number; // for textarea
     disabled?: boolean;
     defaultValue?: any;

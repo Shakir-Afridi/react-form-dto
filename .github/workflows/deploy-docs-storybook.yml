@@ -1,4 +1,4 @@
-name: 🚀 Deploy Docs to Github Pages
+name: 🚀 Deploy Docs & Storybook
 
 on:
   push:
@@ -28,11 +28,20 @@ jobs:
       - name: 📦 Install dependencies
         run: npm ci
 
+      - name: 🏗️ Build Storybook
+        run: npm run build-storybook
+
       - name: 📘 Build VitePress Docs
         run: npm run docs:build
+
+      - name: 🗂️ Organize Output
+        run: |
+          mkdir publish
+          mv storybook-static publish/storybook
+          mv docs/.vitepress/dist publish/docs
 
       - name: 🚀 Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: docs/.vitepress/dist
+          publish_dir: ./publish

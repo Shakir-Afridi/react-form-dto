@@ -73,7 +73,7 @@ export const Section: React.FC<SectionProps> = ({
                 {section.fields.map((field) => (
                     <Grid
                         key={field.id}
-                        size={mapSpanToSize(field.layout?.col)}
+                        size={mapSpanToSize(field.layout?.cols)}
                     >
                         <Field
                             field={field}

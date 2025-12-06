@@ -22,7 +22,14 @@ This library lets you define forms declaratively using JSON DTOs (`FormDTO`, `Se
 
 Comprehensive documentation is available here
 
-👉 [Documentation](https://shakir-afridi.github.io/react-form-dto/)
+👉 [Documentation](https://shakir-afridi.github.io/react-form-dto/docs)
+
+---
+
+## 📘 Storybook
+
+Explore it interactively on Storybook:  
+👉 [Live Demo](https://shakir-afridi.github.io/react-form-dto/storybook)
 
 ---
 
