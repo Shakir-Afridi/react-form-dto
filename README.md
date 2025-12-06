@@ -86,13 +86,13 @@ The form in the image above is generated from this DTO.
 const profileForm: FormDTO = {
     title: "User Profile",
     description: "Fill out your personal information",
-    layout: { columns: 12, gap: "1rem" }, // global form layout
+    layout: { cols: 12, gap: "1rem" }, // global form layout
     sections: [
         {
             id: "personal",
             heading: "Personal Information",
             description: "Basic details about you",
-            layout: { columns: 12, gap: "1rem" }, // section layout
+            layout: { cols: 12, gap: "1rem" }, // section layout
             fields: [
                 {
                     id: "title",
@@ -152,7 +152,7 @@ const profileForm: FormDTO = {
         {
             id: "contact",
             heading: "Contact Information",
-            layout: { columns: 12 },
+            layout: { cols: 12 },
             fields: [
                 {
                     id: "email",

@@ -1,6 +1,6 @@
 // Layout definition reusable across form, section, and field
 export type LayoutDTO = {
-    columns?: number; // number of grid columns
+    cols?: number; // number of grid columns
     gap?: string; // spacing between items (e.g. "1rem")
     direction?: "row" | "column"; // flex direction fallback
     align?: "start" | "center" | "end" | "stretch"; // alignment
@@ -31,10 +31,7 @@ export type FieldDTO = {
     rows?: number; // for textarea
     disabled?: boolean;
     defaultValue?: any;
-    layout?: {
-        col?: number; // starting column
-        direction?: "row" | "column"; // flex direction
-    };
+    layout?: LayoutDTO;
     validations?: Validations;
 };
 

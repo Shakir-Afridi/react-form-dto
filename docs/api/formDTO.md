@@ -21,7 +21,7 @@ const formDTO: FormDTO = {
   titleFontSize: 2,
   description: "Please fill out all required fields.",
   descriptionFontSize: 1.2,
-  layout: { columns: 2, gap: "1rem" },
+  layout: { col: 2, gap: "1rem" },
   sections: [
     {
       id: "personal",

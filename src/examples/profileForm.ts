@@ -3,13 +3,13 @@ import type { FormDTO } from "../types";
 export const profileForm: FormDTO = {
     title: "User Profile",
     description: "Fill out your personal information",
-    layout: { columns: 12, gap: "1rem" }, // global form layout
+    layout: { cols: 12, gap: "1rem" }, // global form layout
     sections: [
         {
             id: "personal",
             heading: "Personal Information",
             description: "Basic details about you",
-            layout: { columns: 12, gap: "1rem" }, // section layout
+            layout: { cols: 12, gap: "1rem" }, // section layout
             fields: [
                 {
                     id: "title",
@@ -17,31 +17,31 @@ export const profileForm: FormDTO = {
                     label: "Title",
                     placeholder: "Select your title",
                     options: ["Mr", "Ms", "Dr", "Prof"],
-                    layout: { col: 4 },
+                    layout: { cols: 4 },
                 },
                 {
                     id: "firstName",
                     type: "text",
                     label: "First Name",
-                    layout: { col: 4 },
+                    layout: { cols: 4 },
                 },
                 {
                     id: "lastName",
                     type: "text",
                     label: "Last Name",
-                    layout: { col: 4 },
+                    layout: { cols: 4 },
                 },
                 {
                     id: "age",
                     type: "number",
                     label: "Age",
-                    layout: { col: 6 },
+                    layout: { cols: 6 },
                 },
                 {
                     id: "dob",
                     type: "date",
                     label: "Date of Birth",
-                    layout: { col: 6 },
+                    layout: { cols: 6 },
                 },
                 {
                     id: "gender",
@@ -65,7 +65,7 @@ export const profileForm: FormDTO = {
                         "GraphQL",
                         "Docker",
                     ],
-                    layout: { col: 12 },
+                    layout: { cols: 12 },
                     validations: {
                         required: "Select at least one skill",
                         validate: (val: string[]) =>
@@ -85,14 +85,14 @@ export const profileForm: FormDTO = {
                         minLength: 20,
                         maxLength: 500,
                     },
-                    layout: { col: 12 },
+                    layout: { cols: 12 },
                 },
             ],
         },
         {
             id: "contact",
             heading: "Contact Information",
-            layout: { columns: 12 },
+            layout: { cols: 12 },
             fields: [
                 {
                     id: "email",
@@ -110,7 +110,7 @@ export const profileForm: FormDTO = {
                     label: "Country",
                     placeholder: "Select a country",
                     options: ["Pakistan", "India", "USA", "UK", "Germany"],
-                    layout: { col: 6 },
+                    layout: { cols: 6 },
                 },
             ],
         },

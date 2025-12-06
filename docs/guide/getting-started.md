@@ -17,9 +17,20 @@ import { FormBuilder } from 'react-form-dto';
 
 // Define your DTO
 const dto = {
-  name: { type: 'string', label: 'Name', required: true },
-  age: { type: 'number', label: 'Age' },
-  email: { type: 'string', label: 'Email', required: true }
+  title: "User Profile",
+  description: "Fill out your personal information",
+  sections:[
+    {
+      id: "personal",
+      heading: "Personal Information",
+      description: "Basic details about you",
+      fields:[
+        { type: 'text', label: 'Name' },
+        { type: 'number', label: 'Age' },
+        { type: 'email', label: 'Email' }
+      ]
+    }
+  ]
 };
 
 export default function MyForm() {

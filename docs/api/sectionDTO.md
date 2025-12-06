@@ -22,7 +22,7 @@ const section: SectionDTO = {
   heading: "Contact Details",
   headingFontSize: 1.5,
   description: "How can we reach you?",
-  layout: { columns: 2, gap: "0.5rem" },
+  layout: { cols: 2, gap: "0.5rem" },
   fields: [
     { id: "email", type: "email", label: "Email Address", required: true },
     { id: "phone", type: "text", label: "Phone Number" }
