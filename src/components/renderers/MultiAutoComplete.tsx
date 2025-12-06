@@ -3,14 +3,14 @@ import React from "react";
 import { Autocomplete, TextField } from "@mui/material";
 import type { FieldDTO } from "@types";
 
-type AutoCompleteFieldProps = {
+type MultiAutoCompleteFieldProps = {
     field: FieldDTO;
-    value: any;
+    value: any[];
     onChange: (val: any) => void;
     error?: string | null;
 };
 
-export const AutoCompleteField: React.FC<AutoCompleteFieldProps> = ({
+export const MultiAutoCompleteField: React.FC<MultiAutoCompleteFieldProps> = ({
     field,
     value,
     onChange,
@@ -18,9 +18,10 @@ export const AutoCompleteField: React.FC<AutoCompleteFieldProps> = ({
 }) => {
     return (
         <Autocomplete
+            multiple // ✅ enables multi‑select
             fullWidth
             options={field.options || []}
-            value={value || null}
+            value={value || []}
             onChange={(_, newValue) => onChange(newValue)}
             renderInput={(params) => (
                 <TextField

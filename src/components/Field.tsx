@@ -4,11 +4,12 @@ import SelectInput from "./renderers/SelectInput";
 import TextInput from "./renderers/TextInput";
 import CheckBoxInput from "./renderers/CheckBoxInput";
 import { AutoCompleteField } from "./renderers/AutoComplete";
+import { MultiAutoCompleteField } from "./renderers/MultiAutoComplete";
 
 /**
  * Props passed to field renderer components.
  */
-export type FieldRendererProps = {
+export interface FieldRendererProps {
     /** The field definition containing type, label, validation rules, etc. */
     field: FieldDTO;
     /** The current value of the field */
@@ -16,21 +17,14 @@ export type FieldRendererProps = {
     /** Callback function to update the field value */
     onChange: (val: any) => void;
     error?: string | null;
-};
+}
 
 /**
  * Props for the Field component.
  */
-type FieldProps = {
-    /** The field definition containing type, label, validation rules, etc. */
-    field: FieldDTO;
-    /** The current value of the field */
-    value: any;
-    /** Callback function to update the field value */
-    onChange: (val: any) => void;
-    /** Optional custom renderers for specific field types */
+interface FieldProps extends FieldRendererProps {
     renderers?: Record<string, React.ComponentType<FieldRendererProps>>;
-};
+}
 
 /**
  * Default field renderer that handles common field types (text, number, date, select, checkbox).
@@ -48,6 +42,8 @@ const DefaultRenderer: React.FC<FieldRendererProps> = ({
     switch (field.type) {
         case "text":
         case "date":
+        case "email":
+        case "password":
         case "number":
             return (
                 <TextInput
@@ -69,6 +65,15 @@ const DefaultRenderer: React.FC<FieldRendererProps> = ({
         case "autocomplete":
             return (
                 <AutoCompleteField
+                    field={field}
+                    value={value}
+                    onChange={onChange}
+                    error={error}
+                />
+            );
+        case "multi-autocomplete":
+            return (
+                <MultiAutoCompleteField
                     field={field}
                     value={value}
                     onChange={onChange}
@@ -105,8 +110,16 @@ export const Field: React.FC<FieldProps> = ({
     field,
     value,
     onChange,
+    error,
     renderers = {},
 }) => {
     const Renderer = renderers[field.type] || DefaultRenderer;
-    return <Renderer field={field} value={value} onChange={onChange} />;
+    return (
+        <Renderer
+            field={field}
+            value={value}
+            onChange={onChange}
+            error={error}
+        />
+    );
 };

@@ -24,6 +24,7 @@ export default function CheckBoxInput({
     return (
         <>
             <FormControlLabel
+                name={field.id}
                 control={
                     <Checkbox
                         checked={!!value}

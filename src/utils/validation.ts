@@ -199,16 +199,12 @@ const validateFieldDTO = (field: FieldDTO, value: any): string[] => {
  */
 export const validateAll = (dto: FormDTO, values: Record<string, any>) => {
     const allErrors: Record<string, string[]> = {};
-
     dto.sections.forEach((section) => {
         section.fields.forEach((field) => {
-            const fieldErrors = validateFieldDTO(field, values[field.id]);
-            if (fieldErrors.length > 0) {
-                allErrors[field.id] = fieldErrors;
-            }
+            const errs = validateField(dto, values, field.id);
+            if (errs.length > 0) allErrors[field.id] = errs;
         });
     });
-
     return allErrors;
 };
 
@@ -225,23 +221,67 @@ export const validateField = (
     values: Record<string, any>,
     fieldId: string
 ): string[] => {
-    // Find the field definition in the DTO
     const field = dto.sections
-        .flatMap((section) => section.fields)
+        .flatMap((s) => s.fields)
         .find((f) => f.id === fieldId);
+    if (!field) return [];
 
-    if (!field) {
-        console.warn(`Field with id "${fieldId}" not found in DTO`);
-        return [];
-    }
-
+    const rules = field.validations || {};
     const value = values[fieldId];
     const errors: string[] = [];
 
-    // Run through all validation rules
-    for (const rule of Object.values(validationRules)) {
-        const error = rule(field, value);
-        if (error) errors.push(error);
+    if (
+        rules.required &&
+        (value === null || value === undefined || value === "")
+    ) {
+        errors.push(
+            typeof rules.required === "string"
+                ? rules.required
+                : `${field.label} is required`
+        );
+    }
+    if (
+        rules.min !== undefined &&
+        typeof value === "number" &&
+        value < rules.min
+    ) {
+        errors.push(`${field.label} must be at least ${rules.min}`);
+    }
+    if (
+        rules.max !== undefined &&
+        typeof value === "number" &&
+        value > rules.max
+    ) {
+        errors.push(`${field.label} must be at most ${rules.max}`);
+    }
+    if (
+        rules.minLength !== undefined &&
+        typeof value === "string" &&
+        value.length < rules.minLength
+    ) {
+        errors.push(
+            `${field.label} must be at least ${rules.minLength} characters`
+        );
+    }
+    if (
+        rules.maxLength !== undefined &&
+        typeof value === "string" &&
+        value.length > rules.maxLength
+    ) {
+        errors.push(
+            `${field.label} must be at most ${rules.maxLength} characters`
+        );
+    }
+    if (
+        rules.pattern &&
+        typeof value === "string" &&
+        !rules.pattern.test(value)
+    ) {
+        errors.push(`${field.label} is invalid`);
+    }
+    if (rules.validate) {
+        const customError = rules.validate(value);
+        if (customError) errors.push(customError);
     }
 
     return errors;

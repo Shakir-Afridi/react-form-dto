@@ -7,10 +7,22 @@ export type LayoutDTO = {
     justify?: "start" | "center" | "end" | "space-between"; // justification
 };
 
+export type InputType =
+    | "text"
+    | "email"
+    | "password"
+    | "textarea"
+    | "number"
+    | "select"
+    | "checkbox"
+    | "date"
+    | "autocomplete"
+    | "multi-autocomplete";
+
 // Individual field definition
 export type FieldDTO = {
     id: string;
-    type: string; // "text" | "number" | "select" | "checkbox" | "date" | "custom"
+    type: InputType;
     label: string;
     placeholder?: string;
     options?: string[];
@@ -24,6 +36,7 @@ export type FieldDTO = {
         dependsOn: string;
         value: any;
     };
+    validations?: Validations;
 };
 
 // Section definition
@@ -49,4 +62,14 @@ export type FormDTO = {
     descriptionFontSize?: number; // rem
     layout?: LayoutDTO; // global form-level layout
     sections: SectionDTO[];
+};
+
+export type Validations = {
+    required?: boolean | string; // string = custom message
+    min?: number;
+    max?: number;
+    minLength?: number;
+    maxLength?: number;
+    pattern?: RegExp;
+    validate?: (value: any) => string | null; // custom function
 };

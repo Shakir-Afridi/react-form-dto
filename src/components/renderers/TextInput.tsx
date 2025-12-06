@@ -21,12 +21,15 @@ export default function TextInput({
     onChange,
     error,
 }: FieldRendererProps) {
+    console.log("error", error);
+
     return (
         <TextField
             fullWidth
             label={field.label}
             placeholder={field.placeholder}
             value={value || ""}
+            name={field.id}
             onChange={(e) => onChange(e.target.value)}
             required={field.required}
             disabled={field.disabled}

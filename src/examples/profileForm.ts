@@ -43,6 +43,27 @@ export const profileForm: FormDTO = {
                     label: "Date of Birth",
                     layout: { col: 6 },
                 },
+                {
+                    id: "skills",
+                    type: "multi-autocomplete",
+                    label: "Skills",
+                    placeholder: "Select your skills",
+                    options: [
+                        "React",
+                        "TypeScript",
+                        "Node.js",
+                        "GraphQL",
+                        "Docker",
+                    ],
+                    layout: { col: 12 },
+                    validations: {
+                        required: "Select at least one skill",
+                        validate: (val: string[]) =>
+                            val && val.length < 2
+                                ? "Pick at least 2 skills"
+                                : null,
+                    },
+                },
             ],
         },
         {
@@ -50,8 +71,24 @@ export const profileForm: FormDTO = {
             heading: "Contact Information",
             layout: { columns: 12 },
             fields: [
-                { id: "email", type: "text", label: "Email" },
+                {
+                    id: "email",
+                    type: "email",
+                    label: "Email",
+                    validations: {
+                        required: "Email is required",
+                        pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    },
+                },
                 { id: "phone", type: "text", label: "Phone Number" },
+                {
+                    id: "country",
+                    type: "autocomplete",
+                    label: "Country",
+                    placeholder: "Select a country",
+                    options: ["Pakistan", "India", "USA", "UK", "Germany"],
+                    layout: { col: 6 },
+                },
             ],
         },
     ],

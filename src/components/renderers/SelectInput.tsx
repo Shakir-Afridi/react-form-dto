@@ -34,6 +34,7 @@ export default function SelectInput({
                 labelId={`${field.id}-label`}
                 value={value}
                 id={field.id}
+                name={field.id}
                 onChange={(e) => onChange(e.target.value)}
                 label={field.label}
                 error={!!error}

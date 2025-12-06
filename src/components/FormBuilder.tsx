@@ -105,6 +105,7 @@ export const FormBuilder = React.forwardRef<
                     values={values}
                     onChange={handleChange}
                     renderers={renderers}
+                    validateField={validateField}
                 />
             ))}
         </>

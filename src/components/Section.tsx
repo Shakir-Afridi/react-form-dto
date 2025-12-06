@@ -16,6 +16,7 @@ type SectionProps = {
     onChange: (id: string, val: any) => void;
     /** Optional custom renderers for specific field types */
     renderers?: Record<string, React.ComponentType<any>>;
+    validateField: (id: string) => string[];
 };
 
 /**
@@ -35,6 +36,7 @@ export const Section: React.FC<SectionProps> = ({
     values,
     onChange,
     renderers,
+    validateField,
 }) => {
     return (
         <Box mb={1}>
@@ -78,6 +80,7 @@ export const Section: React.FC<SectionProps> = ({
                             value={values[field.id]}
                             onChange={(val) => onChange(field.id, val)}
                             renderers={renderers}
+                            error={validateField(field.id)?.join(",")}
                         />
                     </Grid>
                 ))}
