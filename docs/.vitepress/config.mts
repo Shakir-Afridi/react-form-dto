@@ -46,6 +46,14 @@ export default defineConfig({
                                 text: "MultiAutoComplete",
                                 link: "/components/fieldRenderers/multiAutoComplete",
                             },
+                            {
+                                text: "RadioInput",
+                                link: "/components/fieldRenderers/radioInput",
+                            },
+                            {
+                                text: "TextAreaInput",
+                                link: "/components/fieldRenderers/textareaInput",
+                            },
                         ],
                     },
                 ],
