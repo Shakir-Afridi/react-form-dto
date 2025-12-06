@@ -21,7 +21,7 @@ import {
  *   onChange={handleChange}
  * />
  */
-export default function SelectInput({
+export function SelectInput({
     field,
     value,
     onChange,

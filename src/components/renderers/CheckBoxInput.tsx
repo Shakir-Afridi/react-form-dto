@@ -15,7 +15,7 @@ import { Checkbox, FormControlLabel, FormHelperText } from "@mui/material";
  *   onChange={handleChange}
  * />
  */
-export default function CheckBoxInput({
+export function CheckBoxInput({
     field,
     value,
     onChange,

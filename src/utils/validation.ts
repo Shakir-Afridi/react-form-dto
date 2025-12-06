@@ -177,21 +177,6 @@ export const validationRules: Record<string, ValidationFn> = {
 };
 
 /**
- * Validates a single field against all applicable validation rules.
- * @param field - The field definition containing validation rules
- * @param value - The current value of the field
- * @returns An array of error messages, empty if no errors
- */
-const validateFieldDTO = (field: FieldDTO, value: any): string[] => {
-    const errors: string[] = [];
-    for (const rule of Object.values(validationRules)) {
-        const error = rule(field, value);
-        if (error) errors.push(error);
-    }
-    return errors;
-};
-
-/**
  * Validates all fields in a form DTO against their respective validation rules.
  * @param dto - The form DTO containing sections and fields
  * @param values - An object containing current values for all fields (keyed by field ID)

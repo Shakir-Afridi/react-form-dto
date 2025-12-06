@@ -1,0 +1,36 @@
+name: Publish React Package
+
+on:
+  push:
+    branches:
+      - dev # Run workflow on push to dev branch
+    tags:
+      - "v*.*.*" # Run workflow on version tags like v1.0.0
+
+jobs:
+  publish:
+    name: Publish Package to npm
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20" # Set Node.js version
+          registry-url: "https://registry.npmjs.org/"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build package
+        run: npm run build # Make sure your package.json has a build script
+
+      - name: Authenticate with npm
+        run: npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
+
+      - name: Publish package
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

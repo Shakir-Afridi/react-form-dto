@@ -15,7 +15,7 @@ import { TextField } from "@mui/material";
  *   onChange={handleChange}
  * />
  */
-export default function TextInput({
+export function TextInput({
     field,
     value,
     onChange,

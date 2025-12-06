@@ -1,8 +1,13 @@
 {
     "name": "react-form-dto",
-    "private": true,
-    "version": "0.0.0",
+    "version": "0.0.1",
     "type": "module",
+    "main": "dist/react-form-dto.umd.js",
+    "module": "dist/react-form-dto.es.js",
+    "types": "dist/index.d.ts",
+    "files": [
+        "dist"
+    ],
     "scripts": {
         "dev": "vite",
         "build": "tsc -b && vite build",
@@ -33,6 +38,29 @@
         "typescript": "~5.9.3",
         "typescript-eslint": "^8.46.4",
         "vite": "^7.2.4",
+        "vite-plugin-dts": "^4.5.4",
         "vitepress": "^1.6.4"
-    }
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Shakir-Afridi/react-form-dto.git"
+    },
+    "keywords": [
+        "react",
+        "form",
+        "dto",
+        "form-dto",
+        "react-form-dto",
+        "form-data-transfer-object",
+        "data-transfer-object",
+        "dto-pattern",
+        "typescript",
+        "mui",
+        "material-ui",
+        "hooks",
+        "library",
+        "validation"
+    ],
+    "author": "Shakir Ullah",
+    "license": "MIT"
 }
