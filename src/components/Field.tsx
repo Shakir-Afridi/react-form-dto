@@ -5,6 +5,8 @@ import TextInput from "./renderers/TextInput";
 import CheckBoxInput from "./renderers/CheckBoxInput";
 import { AutoCompleteField } from "./renderers/AutoComplete";
 import { MultiAutoCompleteField } from "./renderers/MultiAutoComplete";
+import { TextAreaInput } from "./renderers/TextareaInput";
+import { RadioInput } from "./renderers/RadioInput";
 
 /**
  * Props passed to field renderer components.
@@ -83,6 +85,24 @@ const DefaultRenderer: React.FC<FieldRendererProps> = ({
         case "checkbox":
             return (
                 <CheckBoxInput
+                    field={field}
+                    value={value}
+                    onChange={onChange}
+                    error={error}
+                />
+            );
+        case "textarea":
+            return (
+                <TextAreaInput
+                    field={field}
+                    value={value}
+                    onChange={onChange}
+                    error={error}
+                />
+            );
+        case "radio":
+            return (
+                <RadioInput
                     field={field}
                     value={value}
                     onChange={onChange}

@@ -17,7 +17,8 @@ export type InputType =
     | "checkbox"
     | "date"
     | "autocomplete"
-    | "multi-autocomplete";
+    | "multi-autocomplete"
+    | "radio";
 
 // Individual field definition
 export type FieldDTO = {
@@ -27,10 +28,12 @@ export type FieldDTO = {
     placeholder?: string;
     options?: string[];
     required?: boolean;
+    rows?: number; // for textarea
     disabled?: boolean;
     defaultValue?: any;
     layout?: {
         col?: number; // starting column
+        direction?: "row" | "column"; // flex direction
     };
     validations?: Validations;
 };

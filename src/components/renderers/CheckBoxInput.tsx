@@ -1,5 +1,5 @@
 import type { FieldRendererProps } from "@components/Field";
-import { Checkbox, FormControlLabel, Typography } from "@mui/material";
+import { Checkbox, FormControlLabel, FormHelperText } from "@mui/material";
 
 /**
  * Checkbox input renderer for boolean/checkbox field types.
@@ -34,11 +34,7 @@ export default function CheckBoxInput({
                 }
                 label={field.label}
             />
-            {error && (
-                <Typography variant="caption" color="error">
-                    {error}
-                </Typography>
-            )}
+            {error && <FormHelperText>{error}</FormHelperText>}
         </>
     );
 }

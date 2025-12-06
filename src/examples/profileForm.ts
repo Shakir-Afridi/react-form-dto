@@ -44,6 +44,16 @@ export const profileForm: FormDTO = {
                     layout: { col: 6 },
                 },
                 {
+                    id: "gender",
+                    type: "radio",
+                    label: "Gender",
+                    options: ["Male", "Female", "Other"],
+                    validations: {
+                        required: "Please select your gender",
+                    },
+                    layout: { direction: "row" },
+                },
+                {
                     id: "skills",
                     type: "multi-autocomplete",
                     label: "Skills",
@@ -63,6 +73,19 @@ export const profileForm: FormDTO = {
                                 ? "Pick at least 2 skills"
                                 : null,
                     },
+                },
+                {
+                    id: "bio",
+                    type: "textarea",
+                    label: "Biography",
+                    placeholder: "Tell us about yourself...",
+                    rows: 6,
+                    validations: {
+                        required: "Biography is required",
+                        minLength: 20,
+                        maxLength: 500,
+                    },
+                    layout: { col: 12 },
                 },
             ],
         },
