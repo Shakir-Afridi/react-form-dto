@@ -8,7 +8,7 @@ export default defineConfig({
         nav: [
             { text: "Guide", link: "/guide/getting-started" },
             { text: "Components", link: "/components/formBuilder" },
-            { text: "API", link: "/api/formdto" },
+            { text: "API", link: "/api/formDTO" },
         ],
         sidebar: [
             {
