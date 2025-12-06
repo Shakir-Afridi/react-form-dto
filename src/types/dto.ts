@@ -32,26 +32,18 @@ export type FieldDTO = {
     layout?: {
         col?: number; // starting column
     };
-    conditional?: {
-        dependsOn: string;
-        value: any;
-    };
     validations?: Validations;
 };
 
 // Section definition
 export type SectionDTO = {
     id: string;
-    heading: string;
+    heading?: string;
     headingFontSize?: number; // rem
     description?: string;
     descriptionFontSize?: number; // rem
     layout?: LayoutDTO; // section-level layout
     fields: FieldDTO[];
-    conditional?: {
-        dependsOn: string;
-        value: any;
-    };
 };
 
 // Full form definition
