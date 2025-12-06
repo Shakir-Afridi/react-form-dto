@@ -3,7 +3,7 @@ name: Publish React Package
 on:
   push:
     branches:
-      - dev # Run workflow on push to dev branch
+      - main # Run workflow on push to dev branch
     tags:
       - "v*.*.*" # Run workflow on version tags like v1.0.0
 
