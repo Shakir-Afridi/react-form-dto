@@ -70,11 +70,9 @@ Refer to the documentation and examples for DTO structure and customization.
 
 ### 📋 Example
 
-See [`src/examples/profileForm.ts`](./src/examples/profileForm.ts) for a complete example DTO:
-
 ![Form Example](./example.png)
 
-This image shows the form generated from the below DTO.
+The form in the image above is generated from this DTO.
 
 ```tsx
 const profileForm: FormDTO = {
