@@ -67,8 +67,6 @@ export function useFormBuilder(dto: FormDTO) {
     return {
         /** Current form values for all fields */
         values,
-        /** Current validation errors for all fields */
-        errors,
         /** Function to update a field value */
         handleChange,
         /** Function to validate all fields */

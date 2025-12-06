@@ -17,6 +17,7 @@ export type FormBuilderHandle = {
     validateAll: () => Record<string, string[]>;
     /** Validates a specific field by ID and returns errors */
     validateField: (id: string) => string[];
+    handleChange?: (id: string, val: any) => void;
 };
 
 /**
