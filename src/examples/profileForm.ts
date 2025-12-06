@@ -1,4 +1,4 @@
-import type { FormDTO } from "@types";
+import type { FormDTO } from "../types";
 
 export const profileForm: FormDTO = {
     title: "User Profile",

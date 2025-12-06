@@ -1,9 +1,4 @@
 {
-    "files": [],
-    "references": [
-        { "path": "./tsconfig.app.json" },
-        { "path": "./tsconfig.node.json" }
-    ],
     "compilerOptions": {
         "declaration": true,
         "declarationDir": "./dist",
@@ -18,5 +13,6 @@
         "allowSyntheticDefaultImports": true,
         "strict": true,
         "importHelpers": true
-    }
+    },
+    "include": ["src"]
 }
