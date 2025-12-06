@@ -31,7 +31,6 @@ jobs:
       - name: 📘 Build VitePress Docs
         run: npm run docs:build
 
-      # ✅ No need to move into publish/docs, just deploy dist directly
       - name: 🚀 Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
