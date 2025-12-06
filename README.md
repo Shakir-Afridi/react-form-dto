@@ -18,6 +18,14 @@ This library lets you define forms declaratively using JSON DTOs (`FormDTO`, `Se
 
 ---
 
+📘 Documentation
+
+Comprehensive documentation is available here
+
+👉 [Documentation](https://shakir-afridi.github.io/react-form-dto/)
+
+---
+
 ## 📦 Installation
 
 Clone the repo and install dependencies:
