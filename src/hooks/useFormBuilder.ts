@@ -1,6 +1,6 @@
 import { useState } from "react";
-import type { FormDTO } from "@types";
-import { validateAll, validateField } from "@utils";
+import type { FormDTO } from "../types";
+import { validateAll, validateField } from "../utils";
 
 type Errors = Record<string, string | null>;
 

@@ -1,5 +1,5 @@
 import React from "react";
-import type { FieldDTO } from "@types";
+import type { FieldDTO } from "../types";
 import { SelectInput } from "./renderers/SelectInput";
 import { TextInput } from "./renderers/TextInput";
 import { CheckBoxInput } from "./renderers/CheckBoxInput";

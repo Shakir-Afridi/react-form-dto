@@ -8,7 +8,7 @@ import {
     Radio,
     FormHelperText,
 } from "@mui/material";
-import type { FieldDTO } from "@types";
+import type { FieldDTO } from "../../types";
 
 type RadioInputProps = {
     field: FieldDTO;

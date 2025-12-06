@@ -1,8 +1,8 @@
 import React from "react";
 import { Grid, Typography, Box } from "@mui/material";
-import type { SectionDTO } from "@types";
+import type { SectionDTO } from "../types";
 import { Field } from "./Field";
-import { mapSpanToSize } from "@utils/layout";
+import { mapSpanToSize } from "../utils/layout";
 
 /**
  * Props for the Section component.

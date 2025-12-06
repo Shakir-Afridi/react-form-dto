@@ -1,7 +1,7 @@
 // src/components/TextAreaInput.tsx
 import React from "react";
 import { TextField } from "@mui/material";
-import type { FieldDTO } from "@types";
+import type { FieldDTO } from "../../types";
 
 type TextAreaInputProps = {
     field: FieldDTO;

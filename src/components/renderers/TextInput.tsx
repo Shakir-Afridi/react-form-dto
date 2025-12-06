@@ -1,4 +1,4 @@
-import type { FieldRendererProps } from "@components/Field";
+import type { FieldRendererProps } from "../../components/Field";
 import { TextField } from "@mui/material";
 
 /**

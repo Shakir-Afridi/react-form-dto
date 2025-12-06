@@ -1,8 +1,8 @@
 import React, { useImperativeHandle } from "react";
-import type { FormDTO } from "@types";
+import type { FormDTO } from "../types";
 import { Section } from "./Section";
 import { Typography } from "@mui/material";
-import { useFormBuilder } from "@hooks/useFormBuilder";
+import { useFormBuilder } from "../hooks/useFormBuilder";
 
 /**
  * Handle interface exposed by FormBuilder via ref.

@@ -1,7 +1,7 @@
 // src/components/AutoCompleteField.tsx
 import React from "react";
 import { Autocomplete, TextField } from "@mui/material";
-import type { FieldDTO } from "@types";
+import type { FieldDTO } from "../../types";
 
 type MultiAutoCompleteFieldProps = {
     field: FieldDTO;

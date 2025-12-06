@@ -1,4 +1,4 @@
-import type { FieldDTO, FormDTO } from "@types";
+import type { FieldDTO, FormDTO } from "../types";
 
 type ValidationFn = (field: FieldDTO, value: any) => string | null;
 

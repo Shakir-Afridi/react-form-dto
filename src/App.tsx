@@ -1,4 +1,4 @@
-import { FormBuilder, type FormBuilderHandle } from "@components/FormBuilder";
+import { FormBuilder, type FormBuilderHandle } from "./components/FormBuilder";
 import { profileForm } from "../src/examples/profileForm";
 import { Button } from "@mui/material";
 import { useRef } from "react";
