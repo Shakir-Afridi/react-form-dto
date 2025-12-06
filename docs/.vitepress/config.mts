@@ -7,7 +7,8 @@ export default defineConfig({
     themeConfig: {
         nav: [
             { text: "Guide", link: "/guide/getting-started" },
-            { text: "API", link: "/api" },
+            { text: "Components", link: "/components/formBuilder" },
+            { text: "API", link: "/api/formdto" },
         ],
         sidebar: [
             {
