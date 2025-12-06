@@ -39,7 +39,7 @@ export const Section: React.FC<SectionProps> = ({
     validateField,
 }) => {
     return (
-        <Box mb={1}>
+        <Box mb={2}>
             {section.heading && (
                 <Typography
                     variant="h6"
