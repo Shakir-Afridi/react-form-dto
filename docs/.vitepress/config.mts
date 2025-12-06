@@ -63,9 +63,9 @@ export default defineConfig({
             {
                 text: "API",
                 items: [
-                    { text: "FormDTO", link: "/api/formdto" },
-                    { text: "SectionDTO", link: "/api/sectiondto" },
-                    { text: "FieldDTO", link: "/api/fielddto" },
+                    { text: "FormDTO", link: "/api/formDTO" },
+                    { text: "SectionDTO", link: "/api/sectionDTO" },
+                    { text: "FieldDTO", link: "/api/fieldDTO" },
                     {
                         text: "Hooks",
                         items: [
