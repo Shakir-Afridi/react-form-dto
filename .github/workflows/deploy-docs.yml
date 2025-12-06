@@ -31,13 +31,9 @@ jobs:
       - name: 📘 Build VitePress Docs
         run: npm run docs:build
 
-      - name: 🗂️ Organize Output
-        run: |
-          mkdir publish
-          mv docs/.vitepress/dist publish/docs
-
+      # ✅ No need to move into publish/docs, just deploy dist directly
       - name: 🚀 Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./publish
+          publish_dir: docs/.vitepress/dist
