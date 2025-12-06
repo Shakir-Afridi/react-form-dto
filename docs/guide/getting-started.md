@@ -38,8 +38,3 @@ A DTO is a plain object where each key represents a form field. Each field can s
 ## Rendering the Form
 
 The `FormBuilder` will automatically render input fields for each property in your DTO. You can handle form submission and validation using the built-in features or customize as needed.
-
-## Next Steps
-
-- [DTO Reference](../reference/dto.md)
-- [FormBuilder API](../reference/formbuilder.md)
