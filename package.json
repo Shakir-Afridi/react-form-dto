@@ -54,6 +54,7 @@
     "dependencies": {
         "@emotion/react": "^11.14.0",
         "@emotion/styled": "^11.14.1",
+        "@mui/icons-material": "^7.3.6",
         "@storybook/react": "^10.1.4",
         "@storybook/react-vite": "^10.1.4",
         "storybook": "^10.1.4"
