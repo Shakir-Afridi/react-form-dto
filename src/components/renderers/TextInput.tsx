@@ -31,7 +31,6 @@ export function TextInput({
             value={value || ""}
             name={field.id}
             onChange={(e) => onChange(e.target.value)}
-            required={field.required}
             disabled={field.disabled}
             type={field.type}
             slotProps={{

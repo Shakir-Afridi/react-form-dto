@@ -9,6 +9,8 @@ import {
     Box,
     IconButton,
     Grid,
+    FormControl,
+    InputLabel,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -326,26 +328,35 @@ const FormBuilderPlayground = ({ initialDTO }: { initialDTO: FormDTO }) => {
                                     size="small"
                                     sx={{ width: 100 }}
                                 />
-                                <Select
-                                    label="Type"
-                                    value={field.type}
-                                    onChange={(e) =>
-                                        editField(
-                                            sectionIdx,
-                                            fieldIdx,
-                                            "type",
-                                            e.target.value
-                                        )
-                                    }
+                                <FormControl
                                     size="small"
                                     sx={{ minWidth: 120 }}
                                 >
-                                    {fieldTypes.map((type) => (
-                                        <MenuItem key={type} value={type}>
-                                            {type}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
+                                    <InputLabel
+                                        id={`type-label-${sectionIdx}-${fieldIdx}`}
+                                    >
+                                        Type
+                                    </InputLabel>
+                                    <Select
+                                        labelId={`type-label-${sectionIdx}-${fieldIdx}`}
+                                        label="Type"
+                                        value={field.type}
+                                        onChange={(e) =>
+                                            editField(
+                                                sectionIdx,
+                                                fieldIdx,
+                                                "type",
+                                                e.target.value
+                                            )
+                                        }
+                                    >
+                                        {fieldTypes.map((type) => (
+                                            <MenuItem key={type} value={type}>
+                                                {type}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
                                 <TextField
                                     label="Cols"
                                     type="number"

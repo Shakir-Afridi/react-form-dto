@@ -28,7 +28,6 @@ export const AutoCompleteField: React.FC<AutoCompleteFieldProps> = ({
                     name={field.id}
                     label={field.label}
                     placeholder={field.placeholder}
-                    required={field.required}
                     disabled={field.disabled}
                     error={!!error}
                     helperText={error}

@@ -29,7 +29,6 @@ export const MultiAutoCompleteField: React.FC<MultiAutoCompleteFieldProps> = ({
                     name={field.id}
                     label={field.label}
                     placeholder={field.placeholder}
-                    required={field.required}
                     disabled={field.disabled}
                     error={!!error}
                     helperText={error}
