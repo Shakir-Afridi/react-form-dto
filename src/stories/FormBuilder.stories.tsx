@@ -33,6 +33,7 @@ const defaultDTO: FormDTO = {
         {
             id: "personal",
             heading: "Personal Info",
+            description: "Please enter you personal information",
             fields: [
                 {
                     id: "firstName",
@@ -60,6 +61,7 @@ const defaultDTO: FormDTO = {
         {
             id: "account",
             heading: "Account Details",
+            description: "Please enter your account details",
             fields: [
                 {
                     id: "username",
@@ -175,7 +177,9 @@ const FormBuilderPlayground = ({ initialDTO }: { initialDTO: FormDTO }) => {
                     .map((opt: string) => opt.trim())
                     .filter(Boolean);
                 field.defaultValue = value;
-            } else if (key === "validations") {
+            } else if (key === "type") {
+                field[key] = value;
+                field.defaultValue = null;
             } else {
                 field[key] = value;
             }
@@ -185,10 +189,14 @@ const FormBuilderPlayground = ({ initialDTO }: { initialDTO: FormDTO }) => {
     };
 
     // Edit section heading
-    const editSectionHeading = (sectionIdx: number, value: string) => {
+    const editSectionHeading = (
+        sectionIdx: number,
+        value: string,
+        key: "heading" | "description"
+    ) => {
         setDTO((prev) => {
             const sections = [...prev.sections];
-            sections[sectionIdx].heading = value;
+            sections[sectionIdx][key] = value;
             return { ...prev, sections };
         });
     };
@@ -246,7 +254,21 @@ const FormBuilderPlayground = ({ initialDTO }: { initialDTO: FormDTO }) => {
                                 onChange={(e) =>
                                     editSectionHeading(
                                         sectionIdx,
-                                        e.target.value
+                                        e.target.value,
+                                        "heading"
+                                    )
+                                }
+                                size="small"
+                                sx={{ mr: 2 }}
+                            />
+                            <TextField
+                                label="Section Description"
+                                value={section.description || ""}
+                                onChange={(e) =>
+                                    editSectionHeading(
+                                        sectionIdx,
+                                        e.target.value,
+                                        "description"
                                     )
                                 }
                                 size="small"
