@@ -1,41 +1,49 @@
 # React Form DTO
 
-A **dynamic, DTO-driven form builder** built with **React, TypeScript, and Material UI (MUI v7)**.  
-This library lets you define forms declaratively using JSON DTOs (`FormDTO`, `SectionDTO`, `FieldDTO`) and automatically renders responsive, accessible forms with MUI components.
+**Schema-first, DTO-driven form builder for React and Material UI (MUI v7)**
+
+React Form DTO helps you build complex, responsive, and accessible forms using declarative JSON/TypeScript DTOs instead of verbose JSX. It is designed for enterprise-grade applications, internal tools, admin panels, and workflows where forms are dynamic, configurable, and data-driven.
 
 ---
 
-## ✨ Features
+## Why React Form DTO?
 
-- **DTO-driven**: Define forms entirely in JSON/TypeScript objects.
-- **Material UI integration**: Uses MUI v7 components for consistent design and accessibility.
-- **Responsive grid layout**: 12-column system mapped to MUI’s `Grid` with `size` props.
-- **Conditional rendering**: Show/hide fields or sections based on other field values.
-- **Custom renderers**: Override default MUI inputs with your own components.
-- **TypeScript support**: Strongly typed DTOs for safety and autocompletion.
-- **Composable architecture**: `FormBuilder`, `Section`, and `Field` components.
-- **Built-in validation**: Use `useFormBuilder` hook and validation utilities for field and form validation.
+Most form libraries focus on low-level state management. React Form DTO operates at a **higher abstraction level**.
 
----
+**Use this library when:**
 
-📘 Documentation
+- Your forms are generated from backend schemas or configurations
+- You want to avoid duplicating UI logic across applications
+- You need imperative control over form state (wizards, modals, async flows)
+- Your project is built on Material UI
 
-Comprehensive documentation is available here
+**Key advantages:**
 
-👉 [Documentation](https://shakir-afridi.github.io/react-form-dto/docs)
-
----
-
-## 📘 Storybook
-
-Explore it interactively on Storybook:  
-👉 [Live Demo](https://shakir-afridi.github.io/react-form-dto/storybook)
+- 📄 **DTO-first design** – define forms entirely in JSON or TypeScript
+- 🎨 **Material UI v7 native** – consistent design & accessibility
+- 🧱 **Composable architecture** – Form → Section → Field
+- 🎯 **Imperative API** – programmatic access via refs
+- 🔀 **Conditional rendering** – show/hide fields dynamically
+- 🧩 **Custom renderers** – plug in your own components
+- 🛡️ **Strong TypeScript typing** – predictable, safe APIs
 
 ---
 
-## 📦 Installation
+## How It Compares
 
-Clone the repo and install dependencies:
+| Feature | React Form DTO | React Hook Form | Formik |
+|------|---------------|----------------|--------|
+| Schema/DTO driven | ✅ Native | ❌ Manual | ❌ Manual |
+| MUI-first | ✅ Yes | ⚠️ Partial | ⚠️ Partial |
+| Imperative API | ✅ First-class | ⚠️ Limited | ⚠️ Limited |
+| Large dynamic forms | ✅ Excellent | ⚠️ Medium | ❌ Poor |
+| Boilerplate | ✅ Minimal | ❌ High | ❌ High |
+
+> React Form DTO is **not a replacement** for React Hook Form. It is a higher-level abstraction for schema-driven UI generation.
+
+---
+
+## Installation
 
 ```bash
 git clone https://github.com/Shakir-Afridi/react-form-dto.git
@@ -43,16 +51,15 @@ cd react-form-dto
 npm install
 ```
 
-> **Requirements:**  
-> - Node.js >= 18  
-> - React >= 19  
-> - Material UI >= 7
+### Requirements
+
+- Node.js >= 18
+- React >= 19
+- Material UI >= 7
 
 ---
 
-## 🏗️ Usage
-
-Import and use the form builder in your React app:
+## Minimal Example
 
 ```tsx
 import { FormBuilder, type FormBuilderHandle } from 'react-form-dto';
@@ -79,11 +86,9 @@ return (
 );
 ```
 
-Refer to the documentation and examples for DTO structure and customization.
-
 ---
 
-### 📋 Example
+## 📋 Example Form rendered
 
 ![Form Example](./example.png)
 
@@ -187,28 +192,50 @@ const profileForm: FormDTO = {
 
 ---
 
-### Supported Field Types & Renderers
+## Supported Field Types
 
-- **TextInput**: text, number, date
-- **SelectInput**: select/dropdown
-- **CheckBoxInput**: boolean/checkbox
-- **AutoCompleteField**: single autocomplete
-- **MultiAutoCompleteField**: multi-select autocomplete
+### Text Inputs
 
-You can provide a custom renderer for any field via the DTO:
+- `text`
+- `number`
+- `date`
+- `email`
+- `password`
 
-```tsx
+### Selection Inputs
+
+- `select`
+- `autocomplete`
+- `multi-autocomplete`
+
+### Boolean Inputs
+
+- `checkbox`
+
+---
+
+## Custom Field Renderers
+
+Override any default renderer by supplying your own component:
+
+```ts
 {
-  // ...existing field DTO...
-  renderer: MyCustomComponent
+  id: "salary",
+  type: "number",
+  label: "Salary",
+  renderer: CurrencyInput
 }
 ```
 
-### Validation
+This makes the library extensible without modifying core logic.
 
-The `useFormBuilder` hook provides the following API for managing form state and validation:
+---
 
-```tsx
+## Validation API
+
+Validation is handled through the `useFormBuilder` hook and the imperative form handle.
+
+```ts
 const {
   handleChange,   // Function to update a field value: (id, value) => void
   validateAll,    // Function to validate all fields: () => Record<string, string[]>
@@ -218,13 +245,42 @@ const {
 } = useFormBuilder(myFormDTO);
 ```
 
-- `handleChange(id, value)`: Update a field value.
-- `validateAll()`: Validate all fields and return errors.
-- `validateField(id)`: Validate a specific field and return errors for that field.
-- `getValues()`: Get all form values.
-- `getErrors()`: Get all form errors.
+### Validation Rules
 
-Refer to the documentation and examples for DTO structure and customization.
+```ts
+validations: {
+  required: "This field is required",
+  validate: (value) => value.length < 2 ? "Minimum 2 characters" : null
+}
+```
+
+> Recommendation: Standardize validation return values to `string[]` for predictable handling in large applications.
+
+---
+
+## Documentation & Demo
+
+- 📘 **Documentation:** See full DTO reference, APIs, and advanced examples [Documentation](https://shakir-afridi.github.io/react-form-dto/docs)
+- 📗 **Storybook:** Interactive component playground and live demos [Live Demo](https://shakir-afridi.github.io/react-form-dto/storybook)
+
+---
+
+## Ideal Use Cases
+
+- Admin dashboards
+- Internal enterprise tools
+- Multi-step onboarding flows
+- Config-driven forms from APIs
+- Rapid UI scaffolding for MUI projects
+
+---
+
+## Roadmap (Suggested)
+
+- Field registry API (`registerFieldType`)
+- Async validation support
+- Form-level conditional logic
+- Schema import (JSON Schema / OpenAPI)
 
 ---
 
@@ -240,4 +296,8 @@ Refer to the documentation and examples for DTO structure and customization.
 
 ## 📜 License
 
-MIT License © 2025 Shakir Ullah
+MIT
+
+---
+
+**React Form DTO — Schema-first forms for Material UI**
