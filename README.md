@@ -214,6 +214,143 @@ const profileForm: FormDTO = {
 
 ---
 
+## 🌍 Internationalization (I18n)
+
+React Form DTO has built-in support for multi-language forms through `I18nText` and `I18nOption` types.
+
+### Using I18nText
+
+Any text property (`label`, `placeholder`, `title`, `description`, validation messages) can be either a plain string or a locale map:
+
+```tsx
+// Simple string (single language)
+{
+  label: "First Name"
+}
+
+// Multi-language support
+{
+  label: {
+    en: "First Name",
+    fr: "Prénom",
+    es: "Nombre",
+    de: "Vorname"
+  }
+}
+```
+
+### Using I18nOption for Selections
+
+For select, autocomplete, and multi-autocomplete fields, you can use `I18nOption` objects to provide translatable labels while maintaining stable values:
+
+```tsx
+{
+  id: "country",
+  type: "select",
+  label: { en: "Country", fr: "Pays" },
+  options: [
+    {
+      value: "us",
+      label: { en: "United States", fr: "États-Unis" }
+    },
+    {
+      value: "fr",
+      label: { en: "France", fr: "France" }
+    },
+    {
+      value: "de",
+      label: { en: "Germany", fr: "Allemagne" }
+    }
+  ]
+}
+```
+
+**Backward Compatibility:** Simple string arrays still work:
+
+```tsx
+options: ["USA", "France", "Germany"] // Still supported
+```
+
+### I18n Validation Messages
+
+Validation messages also support I18n:
+
+```tsx
+validations: {
+  required: {
+    en: "This field is required",
+    fr: "Ce champ est obligatoire",
+    es: "Este campo es obligatorio"
+  },
+  validate: (value) => value.length < 2 
+    ? { 
+        en: "Minimum 2 characters",
+        fr: "Minimum 2 caractères" 
+      }
+    : null
+}
+```
+
+### Complete I18n Example
+
+```tsx
+const multilingualForm: FormDTO = {
+  title: {
+    en: "User Registration",
+    fr: "Inscription de l'utilisateur",
+    es: "Registro de Usuario"
+  },
+  description: {
+    en: "Please fill in your details",
+    fr: "Veuillez remplir vos coordonnées",
+    es: "Por favor complete sus datos"
+  },
+  sections: [
+    {
+      id: "personal",
+      heading: {
+        en: "Personal Information",
+        fr: "Informations personnelles",
+        es: "Información Personal"
+      },
+      fields: [
+        {
+          id: "title",
+          type: "select",
+          label: { en: "Title", fr: "Titre", es: "Título" },
+          options: [
+            { value: "mr", label: { en: "Mr", fr: "M.", es: "Sr." } },
+            { value: "ms", label: { en: "Ms", fr: "Mme", es: "Sra." } },
+            { value: "dr", label: { en: "Dr", fr: "Dr", es: "Dr." } }
+          ]
+        },
+        {
+          id: "firstName",
+          type: "text",
+          label: { en: "First Name", fr: "Prénom", es: "Nombre" },
+          placeholder: { 
+            en: "Enter your first name",
+            fr: "Entrez votre prénom",
+            es: "Ingrese su nombre"
+          },
+          validations: {
+            required: {
+              en: "First name is required",
+              fr: "Le prénom est obligatoire",
+              es: "El nombre es obligatorio"
+            }
+          }
+        }
+      ]
+    }
+  ]
+};
+```
+
+> **Note:** The library provides the I18n structure. You'll need to implement locale selection and text resolution in your application layer.
+
+---
+
 ## Custom Field Renderers
 
 Override any default renderer by supplying your own component:
