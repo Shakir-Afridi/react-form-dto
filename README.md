@@ -1,31 +1,43 @@
 # React Form DTO
 
-**Schema-first, DTO-driven form builder for React and Material UI (MUI v7)**
+![npm](https://img.shields.io/npm/v/react-form-dto)
+![license](https://img.shields.io/npm/l/react-form-dto)
+![typescript](https://img.shields.io/badge/TypeScript-Strict-blue)
+![mui](https://img.shields.io/badge/MUI-v7-blue)
 
-React Form DTO helps you build complex, responsive, and accessible forms using declarative JSON/TypeScript DTOs instead of verbose JSX. It is designed for enterprise-grade applications, internal tools, admin panels, and workflows where forms are dynamic, configurable, and data-driven.
+**Schema-first, DTO-driven form framework for React and Material UI (MUI v7)**
+
+React Form DTO is a **high-level form framework** for building complex, dynamic, and enterprise-scale forms using declarative JSON or TypeScript DTOs—rather than verbose, repetitive JSX.
+
+It is designed for **schema-driven UIs**, backend-configured workflows, admin panels, and internal tools where forms must be **configurable, scalable, and predictable**.
 
 ---
 
 ## Why React Form DTO?
 
-Most form libraries focus on low-level state management. React Form DTO operates at a **higher abstraction level**.
+Most form libraries solve **state management**.  
+React Form DTO solves **form architecture**.
 
-**Use this library when:**
+It operates at a higher abstraction level where **layout, validation, rendering, and behavior** are defined in a single schema.
 
-- Your forms are generated from backend schemas or configurations
-- You want to avoid duplicating UI logic across applications
-- You need imperative control over form state (wizards, modals, async flows)
-- Your project is built on Material UI
+### Use this library when:
 
-**Key advantages:**
+- Forms are generated from backend schemas or configuration APIs
+- UI logic must be reused across multiple applications
+- Forms are large, dynamic, or conditional
+- You need imperative control (wizards, modals, async flows)
+- Your design system is based on Material UI
+
+### Key Advantages
 
 - 📄 **DTO-first design** – define forms entirely in JSON or TypeScript
-- 🎨 **Material UI v7 native** – consistent design & accessibility
-- 🧱 **Composable architecture** – Form → Section → Field
-- 🎯 **Imperative API** – programmatic access via refs
-- 🔀 **Conditional rendering** – show/hide fields dynamically
-- 🧩 **Custom renderers** – plug in your own components
-- 🛡️ **Strong TypeScript typing** – predictable, safe APIs
+- 🎨 **Material UI v7 native** – accessibility and consistency by default
+- 🧱 **Composable structure** – Form → Section → Field
+- 🎯 **Imperative API** – programmatic control via refs
+- 🔀 **Conditional rendering** – dynamic visibility and logic
+- 🧩 **Extensible renderers** – plug in custom components
+- 🛡️ **Strong TypeScript typing** – safe, predictable APIs
+- 🚀 **Enterprise-ready** – optimized for large, config-driven forms
 
 ---
 
@@ -33,22 +45,43 @@ Most form libraries focus on low-level state management. React Form DTO operates
 
 | Feature | React Form DTO | React Hook Form | Formik |
 |------|---------------|----------------|--------|
-| Schema/DTO driven | ✅ Native | ❌ Manual | ❌ Manual |
+| Schema / DTO driven | ✅ Native | ❌ Manual | ❌ Manual |
 | MUI-first | ✅ Yes | ⚠️ Partial | ⚠️ Partial |
 | Imperative API | ✅ First-class | ⚠️ Limited | ⚠️ Limited |
 | Large dynamic forms | ✅ Excellent | ⚠️ Medium | ❌ Poor |
 | Boilerplate | ✅ Minimal | ❌ High | ❌ High |
 
-> React Form DTO is **not a replacement** for React Hook Form. It is a higher-level abstraction for schema-driven UI generation.
+> **Note:** React Form DTO is **not a replacement** for React Hook Form.  
+> It is a **higher-level abstraction** for schema-driven UI generation.
+
+---
+
+## What This Library Is Not
+
+- ❌ A low-level form state library
+- ❌ A visual form builder
+- ❌ A replacement for small hand-crafted forms
+- ❌ A design system
+
+React Form DTO excels when **forms are data, not components**.
+
+---
+
+## Documentation & Demo
+
+- 📘 **Documentation:** See full DTO reference, APIs, and advanced examples [Documentation](https://shakir-afridi.github.io/react-form-dto/docs)
+- 📗 **Storybook:** Interactive component playground and live demos [Live Demo](https://shakir-afridi.github.io/react-form-dto/storybook)
 
 ---
 
 ## Installation
 
 ```bash
-git clone https://github.com/Shakir-Afridi/react-form-dto.git
-cd react-form-dto
-npm install
+npm install react-form-dto
+# or
+yarn add react-form-dto
+# or
+pnpm add react-form-dto
 ```
 
 ### Requirements
@@ -59,7 +92,25 @@ npm install
 
 ---
 
-## Minimal Example
+## Core Concepts
+
+### DTO as Source of Truth
+
+All structure, layout, validation, and behavior live in a single schema.
+
+### Stateless Rendering
+
+The UI is derived entirely from the DTO and internal state.
+
+### Imperative Escape Hatch
+
+Refs enable workflows that declarative-only approaches struggle with.
+
+### Renderer Isolation
+
+Field logic is decoupled from presentation, enabling customization.
+
+## Quick Start
 
 ```tsx
 import { FormBuilder, type FormBuilderHandle } from 'react-form-dto';
@@ -201,12 +252,14 @@ const profileForm: FormDTO = {
 - `date`
 - `email`
 - `password`
+- `textarea`
 
 ### Selection Inputs
 
 - `select`
 - `autocomplete`
 - `multi-autocomplete`
+- `radio`
 
 ### Boolean Inputs
 
@@ -395,20 +448,46 @@ validations: {
 
 ---
 
-## Documentation & Demo
+## Real-World Enterprise Usage
 
-- 📘 **Documentation:** See full DTO reference, APIs, and advanced examples [Documentation](https://shakir-afridi.github.io/react-form-dto/docs)
-- 📗 **Storybook:** Interactive component playground and live demos [Live Demo](https://shakir-afridi.github.io/react-form-dto/storybook)
+```text
+Backend → returns FormDTO
+Frontend → renders form dynamically
+Backend updates → UI changes without redeploy
+```
+
+This enables:
+
+- Backend-driven workflows
+- Feature flags via schemas
+- Faster iteration without frontend releases
 
 ---
 
-## Ideal Use Cases
+## Other Use Cases
 
 - Admin dashboards
 - Internal enterprise tools
 - Multi-step onboarding flows
 - Config-driven forms from APIs
 - Rapid UI scaffolding for MUI projects
+
+---
+
+## Performance Characteristics
+
+- Independent field rendering
+- Section-level isolation
+- Optimized for 100+ field forms
+- No unnecessary re-renders across sections
+
+---
+
+## Incremental Adoption Strategy
+
+- Use React Form DTO for large dynamic forms
+- Keep React Hook Form for small custom forms
+- Share validation logic between both
 
 ---
 
@@ -423,11 +502,18 @@ validations: {
 
 ## 🤝 Contributing
 
-- Fork the repo
-- Create a feature branch (`git checkout -b feature/my-feature`)
-- Commit changes (`git commit -m "Add my feature"`)
-- Push to branch (`git push origin feature/my-feature`)
-- Open a Pull Request
+Contributions are welcome and encouraged.
+
+1. Fork the repository
+2. Create a feature branch
+   `git checkout -b feature/my-feature`
+3. Commit your changes
+   `git commit -m "Add my feature"`
+4. Push to the branch
+   `git push origin feature/my-feature`
+5. Open a Pull Request
+
+Please keep changes focused and well-documented.
 
 ---
 
