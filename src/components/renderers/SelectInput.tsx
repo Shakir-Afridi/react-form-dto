@@ -6,6 +6,7 @@ import {
     Select,
     Typography,
 } from "@mui/material";
+import { resolveI18nString, resolveI18nOptionLabels } from "../../utils/i18n";
 
 /**
  * Select input renderer for dropdown/select field types.
@@ -26,22 +27,27 @@ export function SelectInput({
     value,
     onChange,
     error,
+    locale = "en",
 }: FieldRendererProps) {
+    const options = resolveI18nOptionLabels(field.options || [], locale);
+
     return (
         <FormControl fullWidth>
-            <InputLabel id={`${field.id}-label`}>{field.label}</InputLabel>
+            <InputLabel id={`${field.id}-label`}>
+                {resolveI18nString(field.label, locale)}
+            </InputLabel>
             <Select
                 labelId={`${field.id}-label`}
                 value={value}
                 id={field.id}
                 name={field.id}
                 onChange={(e) => onChange(e.target.value)}
-                label={field.label}
+                label={resolveI18nString(field.label, locale)}
                 error={!!error}
             >
-                {field.options?.map((opt) => (
-                    <MenuItem key={opt} value={opt}>
-                        {opt}
+                {options?.map((opt) => (
+                    <MenuItem key={opt.label} value={opt.value}>
+                        {opt.label}
                     </MenuItem>
                 ))}
             </Select>

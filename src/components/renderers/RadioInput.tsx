@@ -9,12 +9,14 @@ import {
     FormHelperText,
 } from "@mui/material";
 import type { FieldDTO } from "../../types";
+import { resolveI18nString, resolveI18nOptionLabels } from "../../utils/i18n";
 
 type RadioInputProps = {
     field: FieldDTO;
     value: any;
     onChange: (val: any) => void;
     error?: string | null;
+    locale?: string;
 };
 
 export const RadioInput: React.FC<RadioInputProps> = ({
@@ -22,11 +24,13 @@ export const RadioInput: React.FC<RadioInputProps> = ({
     value,
     onChange,
     error,
+    locale = "en",
 }) => {
+    const options = resolveI18nOptionLabels(field.options || [], locale);
     return (
         <FormControl component="fieldset" fullWidth error={!!error}>
             <FormLabel component="legend">
-                {field.label}
+                {resolveI18nString(field.label, locale)}
                 {field.validations?.required ? " *" : ""}
             </FormLabel>
             <RadioGroup
@@ -34,12 +38,12 @@ export const RadioInput: React.FC<RadioInputProps> = ({
                 value={value || ""}
                 onChange={(e) => onChange(e.target.value)}
             >
-                {(field.options || []).map((option) => (
+                {(options || []).map((option) => (
                     <FormControlLabel
-                        key={option}
+                        key={option.label}
                         value={option}
                         control={<Radio />}
-                        label={option}
+                        label={option.label}
                         disabled={field.disabled}
                     />
                 ))}

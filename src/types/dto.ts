@@ -7,6 +7,15 @@ export type LayoutDTO = {
     justify?: "start" | "center" | "end" | "space-between"; // justification
 };
 
+// i18n: plain string or a locale map, e.g. "Name" or { en: "Name", fr: "Nom" }
+export type I18nString = string | Record<string, string>;
+
+// Optional helper for selections with stable values and translatable labels
+export type I18nOption = {
+    value: string;
+    label: I18nString;
+};
+
 export type InputType =
     | "text"
     | "email"
@@ -24,9 +33,11 @@ export type InputType =
 export type FieldDTO = {
     id: string;
     type: InputType;
-    label: string;
-    placeholder?: string;
-    options?: string[];
+    label: I18nString;
+    placeholder?: I18nString;
+    // Backward compatible: string[] still works (string is I18nString).
+    // For richer control, use { value, label } objects.
+    options?: I18nOption[] | I18nString[];
     rows?: number; // for textarea
     disabled?: boolean;
     defaultValue?: any;
@@ -37,9 +48,9 @@ export type FieldDTO = {
 // Section definition
 export type SectionDTO = {
     id: string;
-    heading?: string;
+    heading?: I18nString;
     headingFontSize?: number; // rem
-    description?: string;
+    description?: I18nString;
     descriptionFontSize?: number; // rem
     layout?: LayoutDTO; // section-level layout
     fields: FieldDTO[];
@@ -47,20 +58,20 @@ export type SectionDTO = {
 
 // Full form definition
 export type FormDTO = {
-    title?: string;
+    title?: I18nString;
     titleFontSize?: number; // rem
-    description?: string;
+    description?: I18nString;
     descriptionFontSize?: number; // rem
     layout?: LayoutDTO; // global form-level layout
     sections: SectionDTO[];
 };
 
 export type Validations = {
-    required?: boolean | string; // string = custom message
+    required?: boolean | I18nString; // string or i18n message
     min?: number;
     max?: number;
     minLength?: number;
     maxLength?: number;
     pattern?: RegExp;
-    validate?: (value: any) => string | null; // custom function
+    validate?: (value: any) => I18nString | null; // custom function; return message or null
 };

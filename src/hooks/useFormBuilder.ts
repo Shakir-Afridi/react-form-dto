@@ -16,7 +16,7 @@ type Errors = Record<string, string | null>;
  * form.handleChange('email', 'user@example.com');
  * const errors = form.validateAll();
  */
-export function useFormBuilder(dto: FormDTO) {
+export function useFormBuilder(dto: FormDTO, locale = "en") {
     const [values, setValues] = useState<Record<string, any>>({});
     const [errors, setErrors] = useState<Errors>({});
 
@@ -37,7 +37,7 @@ export function useFormBuilder(dto: FormDTO) {
      * @returns An object mapping field IDs to arrays of error messages
      */
     const validateAllFields = () => {
-        return validateAll(dto, values);
+        return validateAll(dto, values, locale);
     };
 
     /**
@@ -47,7 +47,7 @@ export function useFormBuilder(dto: FormDTO) {
      * @returns An array of error messages for the field
      */
     const validateFieldById = (id: string) => {
-        return validateField(dto, values, id);
+        return validateField(dto, values, id, locale);
     };
 
     /**

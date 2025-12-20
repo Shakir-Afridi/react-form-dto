@@ -1,4 +1,5 @@
 import type { FieldDTO, FormDTO } from "../types";
+import { resolveI18nString } from "../utils/i18n";
 
 type ValidationFn = (field: FieldDTO, value: any) => string | null;
 
@@ -15,7 +16,7 @@ export const validationRules: Record<string, ValidationFn> = {
      */
     required: (field, value) => {
         if (
-            field.required &&
+            (field as any).required &&
             (value === null || value === undefined || value === "")
         ) {
             return `${field.label} is required`;
@@ -182,7 +183,11 @@ export const validationRules: Record<string, ValidationFn> = {
  * @param values - An object containing current values for all fields (keyed by field ID)
  * @returns An object mapping field IDs to arrays of error messages
  */
-export const validateAll = (dto: FormDTO, values: Record<string, any>) => {
+export const validateAll = (
+    dto: FormDTO,
+    values: Record<string, any>,
+    locale = "en"
+) => {
     const allErrors: Record<string, string[]> = {};
     dto.sections.forEach((section) => {
         section.fields.forEach((field) => {
@@ -204,7 +209,8 @@ export const validateAll = (dto: FormDTO, values: Record<string, any>) => {
 export const validateField = (
     dto: FormDTO,
     values: Record<string, any>,
-    fieldId: string
+    fieldId: string,
+    locale = "en"
 ): string[] => {
     const field = dto.sections
         .flatMap((s) => s.fields)
@@ -214,7 +220,7 @@ export const validateField = (
     const rules = field.validations || {};
     const value = values[fieldId];
     const errors: string[] = [];
-
+    const label = resolveI18nString(field.label, locale);
     if (
         rules.required &&
         (value === null || value === undefined || value === "")
@@ -222,7 +228,7 @@ export const validateField = (
         errors.push(
             typeof rules.required === "string"
                 ? rules.required
-                : `${field.label} is required`
+                : `${label} is required`
         );
     }
     if (
@@ -230,43 +236,39 @@ export const validateField = (
         typeof value === "number" &&
         value < rules.min
     ) {
-        errors.push(`${field.label} must be at least ${rules.min}`);
+        errors.push(`${label} must be at least ${rules.min}`);
     }
     if (
         rules.max !== undefined &&
         typeof value === "number" &&
         value > rules.max
     ) {
-        errors.push(`${field.label} must be at most ${rules.max}`);
+        errors.push(`${label} must be at most ${rules.max}`);
     }
     if (
         rules.minLength !== undefined &&
         typeof value === "string" &&
         value.length < rules.minLength
     ) {
-        errors.push(
-            `${field.label} must be at least ${rules.minLength} characters`
-        );
+        errors.push(`${label} must be at least ${rules.minLength} characters`);
     }
     if (
         rules.maxLength !== undefined &&
         typeof value === "string" &&
         value.length > rules.maxLength
     ) {
-        errors.push(
-            `${field.label} must be at most ${rules.maxLength} characters`
-        );
+        errors.push(`${label} must be at most ${rules.maxLength} characters`);
     }
     if (
         rules.pattern &&
         typeof value === "string" &&
         !rules.pattern.test(value)
     ) {
-        errors.push(`${field.label} is invalid`);
+        errors.push(`${label} is invalid`);
     }
     if (rules.validate) {
         const customError = rules.validate(value);
-        if (customError) errors.push(customError);
+        if (customError) errors.push(resolveI18nString(customError, locale));
     }
 
     return errors;

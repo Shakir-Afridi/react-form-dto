@@ -3,6 +3,7 @@ import type { FormDTO } from "../types";
 import { Section } from "./Section";
 import { Typography } from "@mui/material";
 import { useFormBuilder } from "../hooks/useFormBuilder";
+import { resolveI18nString } from "../utils/i18n";
 
 /**
  * Handle interface exposed by FormBuilder via ref.
@@ -28,6 +29,8 @@ type FormBuilderProps = {
     dto: FormDTO;
     /** Optional custom renderers for specific field types */
     renderers?: Record<string, React.ComponentType<any>>;
+    /** Current locale for i18n string resolution (default: 'en') */
+    locale?: string;
 };
 
 /**
@@ -50,7 +53,7 @@ type FormBuilderProps = {
 export const FormBuilder = React.forwardRef<
     FormBuilderHandle,
     FormBuilderProps
->(({ dto, renderers }, ref) => {
+>(({ dto, renderers, locale = "en" }, ref) => {
     const {
         values,
         handleChange,
@@ -58,7 +61,7 @@ export const FormBuilder = React.forwardRef<
         getErrors,
         validateAll,
         validateField,
-    } = useFormBuilder(dto);
+    } = useFormBuilder(dto, locale);
 
     // Expose methods via ref
     useImperativeHandle(ref, () => ({
@@ -82,7 +85,7 @@ export const FormBuilder = React.forwardRef<
                     }}
                     gutterBottom
                 >
-                    {dto.title}
+                    {resolveI18nString(dto.title, locale)}
                 </Typography>
             )}
             {dto.description && (
@@ -96,7 +99,7 @@ export const FormBuilder = React.forwardRef<
                     color="textSecondary"
                     gutterBottom
                 >
-                    {dto.description}
+                    {resolveI18nString(dto.description, locale)}
                 </Typography>
             )}
             {dto.sections.map((section) => (
@@ -107,6 +110,7 @@ export const FormBuilder = React.forwardRef<
                     onChange={handleChange}
                     renderers={renderers}
                     validateField={validateField}
+                    locale={locale}
                 />
             ))}
         </>

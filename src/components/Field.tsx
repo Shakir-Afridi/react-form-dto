@@ -19,6 +19,7 @@ export interface FieldRendererProps {
     /** Callback function to update the field value */
     onChange: (val: any) => void;
     error?: string | null;
+    locale: string;
 }
 
 /**
@@ -40,6 +41,7 @@ const DefaultRenderer: React.FC<FieldRendererProps> = ({
     value,
     onChange,
     error,
+    locale = "en",
 }) => {
     switch (field.type) {
         case "text":
@@ -53,6 +55,7 @@ const DefaultRenderer: React.FC<FieldRendererProps> = ({
                     value={value}
                     onChange={onChange}
                     error={error}
+                    locale={locale}
                 />
             );
         case "select":
@@ -62,6 +65,7 @@ const DefaultRenderer: React.FC<FieldRendererProps> = ({
                     value={value}
                     onChange={onChange}
                     error={error}
+                    locale={locale}
                 />
             );
         case "autocomplete":
@@ -71,6 +75,7 @@ const DefaultRenderer: React.FC<FieldRendererProps> = ({
                     value={value}
                     onChange={onChange}
                     error={error}
+                    locale={locale}
                 />
             );
         case "multi-autocomplete":
@@ -80,6 +85,7 @@ const DefaultRenderer: React.FC<FieldRendererProps> = ({
                     value={value}
                     onChange={onChange}
                     error={error}
+                    locale={locale}
                 />
             );
         case "checkbox":
@@ -89,6 +95,7 @@ const DefaultRenderer: React.FC<FieldRendererProps> = ({
                     value={value}
                     onChange={onChange}
                     error={error}
+                    locale={locale}
                 />
             );
         case "textarea":
@@ -98,6 +105,7 @@ const DefaultRenderer: React.FC<FieldRendererProps> = ({
                     value={value}
                     onChange={onChange}
                     error={error}
+                    locale={locale}
                 />
             );
         case "radio":
@@ -107,6 +115,7 @@ const DefaultRenderer: React.FC<FieldRendererProps> = ({
                     value={value}
                     onChange={onChange}
                     error={error}
+                    locale={locale}
                 />
             );
         default:
@@ -132,6 +141,7 @@ export const Field: React.FC<FieldProps> = ({
     onChange,
     error,
     renderers = {},
+    locale = "en",
 }) => {
     const Renderer = renderers[field.type] || DefaultRenderer;
     return (
@@ -140,6 +150,7 @@ export const Field: React.FC<FieldProps> = ({
             value={value}
             onChange={onChange}
             error={error}
+            locale={locale}
         />
     );
 };

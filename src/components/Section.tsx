@@ -3,6 +3,7 @@ import { Grid, Typography, Box } from "@mui/material";
 import type { SectionDTO } from "../types";
 import { Field } from "./Field";
 import { mapSpanToSize } from "../utils/layout";
+import { resolveI18nString } from "../utils/i18n";
 
 /**
  * Props for the Section component.
@@ -17,6 +18,8 @@ type SectionProps = {
     /** Optional custom renderers for specific field types */
     renderers?: Record<string, React.ComponentType<any>>;
     validateField: (id: string) => string[];
+    /** Current locale for i18n string resolution (default: 'en') */
+    locale?: string;
 };
 
 /**
@@ -37,6 +40,7 @@ export const Section: React.FC<SectionProps> = ({
     onChange,
     renderers,
     validateField,
+    locale = "en",
 }) => {
     return (
         <Box mb={2}>
@@ -51,7 +55,7 @@ export const Section: React.FC<SectionProps> = ({
                     gutterBottom
                     color="black"
                 >
-                    {section.heading}
+                    {resolveI18nString(section.heading, locale)}
                 </Typography>
             )}
 
@@ -66,7 +70,7 @@ export const Section: React.FC<SectionProps> = ({
                     color="textSecondary"
                     gutterBottom
                 >
-                    {section.description}
+                    {resolveI18nString(section.description, locale)}
                 </Typography>
             )}
             <Grid container spacing={2}>
@@ -81,6 +85,7 @@ export const Section: React.FC<SectionProps> = ({
                             onChange={(val) => onChange(field.id, val)}
                             renderers={renderers}
                             error={validateField(field.id)?.join(",")}
+                            locale={locale}
                         />
                     </Grid>
                 ))}

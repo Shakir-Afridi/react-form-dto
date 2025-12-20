@@ -1,5 +1,6 @@
 import type { FieldRendererProps } from "../../components/Field";
 import { Checkbox, FormControlLabel, FormHelperText } from "@mui/material";
+import { resolveI18nString } from "../../utils/i18n";
 
 /**
  * Checkbox input renderer for boolean/checkbox field types.
@@ -20,6 +21,7 @@ export function CheckBoxInput({
     value,
     onChange,
     error,
+    locale,
 }: FieldRendererProps) {
     return (
         <>
@@ -32,7 +34,7 @@ export function CheckBoxInput({
                         disabled={field.disabled}
                     />
                 }
-                label={field.label}
+                label={resolveI18nString(field.label, locale)}
             />
             {error && <FormHelperText>{error}</FormHelperText>}
         </>
