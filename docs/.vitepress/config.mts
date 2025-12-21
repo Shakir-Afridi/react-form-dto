@@ -66,6 +66,7 @@ export default defineConfig({
                     { text: "FormDTO", link: "/api/formDTO" },
                     { text: "SectionDTO", link: "/api/sectionDTO" },
                     { text: "FieldDTO", link: "/api/fieldDTO" },
+                    { text: "VisiableWhen", link: "/api/visiableWhen" },
                     {
                         text: "Hooks",
                         items: [
