@@ -77,7 +77,7 @@ export const Section: React.FC<SectionProps> = ({
             <Grid container spacing={2}>
                 {section.fields.map(
                     (field) =>
-                        evaluateCondition(field.visiableWhen, values) && (
+                        evaluateCondition(field.visibleWhen, values) && (
                             <Grid
                                 key={field.id}
                                 size={mapSpanToSize(field.layout?.cols)}
