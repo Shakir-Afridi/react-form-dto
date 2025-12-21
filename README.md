@@ -93,6 +93,12 @@ pnpm add react-form-dto
 
 ---
 
+## Release Notes
+
+See [CHANGELOG.md](./.github/CHANGELOG.md) for detailed version history.
+
+---
+
 ## Core Concepts
 
 ### DTO as Source of Truth
