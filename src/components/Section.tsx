@@ -4,6 +4,7 @@ import type { SectionDTO } from "../types";
 import { Field } from "./Field";
 import { mapSpanToSize } from "../utils/layout";
 import { resolveI18nString } from "../utils/i18n";
+import { evaluateCondition } from "../utils";
 
 /**
  * Props for the Section component.
@@ -74,21 +75,24 @@ export const Section: React.FC<SectionProps> = ({
                 </Typography>
             )}
             <Grid container spacing={2}>
-                {section.fields.map((field) => (
-                    <Grid
-                        key={field.id}
-                        size={mapSpanToSize(field.layout?.cols)}
-                    >
-                        <Field
-                            field={field}
-                            value={values[field.id]}
-                            onChange={(val) => onChange(field.id, val)}
-                            renderers={renderers}
-                            error={validateField(field.id)?.join(",")}
-                            locale={locale}
-                        />
-                    </Grid>
-                ))}
+                {section.fields.map(
+                    (field) =>
+                        evaluateCondition(field.visiableWhen, values) && (
+                            <Grid
+                                key={field.id}
+                                size={mapSpanToSize(field.layout?.cols)}
+                            >
+                                <Field
+                                    field={field}
+                                    value={values[field.id]}
+                                    onChange={(val) => onChange(field.id, val)}
+                                    renderers={renderers}
+                                    error={validateField(field.id)?.join(",")}
+                                    locale={locale}
+                                />
+                            </Grid>
+                        )
+                )}
             </Grid>
         </Box>
     );

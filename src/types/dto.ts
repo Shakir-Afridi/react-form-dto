@@ -43,6 +43,7 @@ export type FieldDTO = {
     defaultValue?: any;
     layout?: LayoutDTO;
     validations?: Validations;
+    visiableWhen?: Condition;
 };
 
 // Section definition
@@ -75,3 +76,22 @@ export type Validations = {
     pattern?: RegExp;
     validate?: (value: any) => I18nString | null; // custom function; return message or null
 };
+
+export interface FieldCondition {
+    field: string;
+    equals?: any;
+    notEquals?: any;
+    in?: any[];
+    notIn?: any[];
+    greaterThan?: number;
+    lessThan?: number;
+}
+
+// A group of conditions with logical operator
+export interface ConditionGroup {
+    operator: "AND" | "OR";
+    conditions: Condition[];
+}
+
+// Union type: a condition can be either a leaf or a group
+export type Condition = FieldCondition | ConditionGroup;
