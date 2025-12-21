@@ -274,9 +274,9 @@ const profileForm: FormDTO = {
 
 ---
 
-## 🎭 Conditional Visibility with `visiableWhen`
+## 🎭 Conditional Visibility with `visibleWhen`
 
-React Form DTO supports dynamic field visibility based on the values of other fields in the form. This is achieved through the `visiableWhen` property, which allows you to define simple conditions or complex logical expressions.
+React Form DTO supports dynamic field visibility based on the values of other fields in the form. This is achieved through the `visibleWhen` property, which allows you to define simple conditions or complex logical expressions.
 
 ### Basic Usage
 
@@ -287,14 +287,14 @@ Show a field only when another field has a specific value:
   id: "partnerName",
   type: "text",
   label: "Partner Name",
-  visiableWhen: {
+  visibleWhen: {
     field: "maritalStatus",
     equals: "married"
   }
 }
 ```
 
-For detail docuemtation, please visit [Docs](https://shakir-afridi.github.io/react-form-dto/docs/api/visiableWhen.html)
+For detail docuemtation, please visit [Docs](https://shakir-afridi.github.io/react-form-dto/docs/api/visibleWhen.html)
 
 ---
 

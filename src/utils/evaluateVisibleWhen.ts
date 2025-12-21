@@ -23,8 +23,6 @@ export function evaluateCondition(
             value = value.value ?? "";
         }
 
-        console.log("Evaluating condition:", condition, "with value:", value);
-
         if (condition.equals !== undefined) {
             return value === condition.equals;
         }

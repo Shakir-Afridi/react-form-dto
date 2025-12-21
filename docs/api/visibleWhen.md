@@ -1,6 +1,6 @@
-# visiableWhen API
+# visibleWhen API
 
-The `visiableWhen` property allows you to conditionally show or hide fields based on the values of other fields in the form. It supports both simple field conditions and complex logical expressions using `AND`/`OR` operators.
+The `visibleWhen` property allows you to conditionally show or hide fields based on the values of other fields in the form. It supports both simple field conditions and complex logical expressions using `AND`/`OR` operators.
 
 ## Types
 
@@ -37,12 +37,12 @@ Groups multiple conditions with a logical operator.
 
 ## Usage in FieldDTO
 
-Add the `visiableWhen` property to any field:
+Add the `visibleWhen` property to any field:
 
 ```ts
 type FieldDTO = {
   // ...other properties...
-  visiableWhen?: Condition;
+  visibleWhen?: Condition;
 };
 ```
 
@@ -57,7 +57,7 @@ Show a field only when another field equals a specific value:
   id: "partnerName",
   type: "text",
   label: "Partner Name",
-  visiableWhen: {
+  visibleWhen: {
     field: "maritalStatus",
     equals: "married"
   }
@@ -73,7 +73,7 @@ Show a field when another field's value is in a list:
   id: "licenseNumber",
   type: "text",
   label: "License Number",
-  visiableWhen: {
+  visibleWhen: {
     field: "vehicleType",
     in: ["car", "motorcycle", "truck"]
   }
@@ -89,7 +89,7 @@ Show a field when another field's value is not in a list:
   id: "alternativeContact",
   type: "text",
   label: "Alternative Contact",
-  visiableWhen: {
+  visibleWhen: {
     field: "contactMethod",
     notIn: ["email", "phone"]
   }
@@ -105,7 +105,7 @@ Show a field based on numeric conditions:
   id: "seniorDiscount",
   type: "checkbox",
   label: "Apply Senior Discount",
-  visiableWhen: {
+  visibleWhen: {
     field: "age",
     greaterThan: 65
   }
@@ -121,7 +121,7 @@ Show a field only when ALL conditions are met:
   id: "employeeId",
   type: "text",
   label: "Employee ID",
-  visiableWhen: {
+  visibleWhen: {
     operator: "AND",
     conditions: [
       { field: "employmentStatus", equals: "employed" },
@@ -141,7 +141,7 @@ Show a field when ANY condition is met:
   type: "select",
   label: "Type of Assistance",
   options: ["Financial", "Medical", "Legal"],
-  visiableWhen: {
+  visibleWhen: {
     operator: "OR",
     conditions: [
       { field: "income", lessThan: 30000 },
@@ -161,7 +161,7 @@ Combine multiple logical groups for complex conditions:
   id: "specialOffer",
   type: "text",
   label: "Special Offer Code",
-  visiableWhen: {
+  visibleWhen: {
     operator: "AND",
     conditions: [
       { field: "isNewCustomer", equals: true },
@@ -190,7 +190,7 @@ When evaluating multi-select or multi-autocomplete fields:
   type: "select",
   label: "Expertise Level",
   options: ["Beginner", "Intermediate", "Advanced"],
-  visiableWhen: {
+  visibleWhen: {
     field: "interests",
     in: ["programming", "data-science"]
   }
@@ -199,7 +199,7 @@ When evaluating multi-select or multi-autocomplete fields:
 
 ## Behavior Notes
 
-- If `visiableWhen` is not specified, the field is always visible.
+- If `visibleWhen` is not specified, the field is always visible.
 - If a referenced field doesn't exist in the form state, its value is treated as an empty string.
 - For multi-select fields, values are extracted from `{ value, label }` objects automatically.
 - Conditions are evaluated reactively as form values change.

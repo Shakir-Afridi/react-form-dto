@@ -43,7 +43,7 @@ export type FieldDTO = {
     defaultValue?: any;
     layout?: LayoutDTO;
     validations?: Validations;
-    visiableWhen?: Condition;
+    visibleWhen?: Condition;
 };
 
 // Section definition

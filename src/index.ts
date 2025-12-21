@@ -19,9 +19,9 @@ export type {
     FormDTO,
     InputType,
     Validations,
-    Condition as VisiableWhenCondition,
-    FieldCondition as VisiableWhenFieldCondition,
-    ConditionGroup as VisiableWhenConditionGroup,
+    Condition as VisibleWhenCondition,
+    FieldCondition as VisibleWhenFieldCondition,
+    ConditionGroup as VisibleWhenConditionGroup,
 } from "./types";
 
 export { useFormBuilder } from "./hooks";
