@@ -1,7 +1,7 @@
 {
     "name": "react-form-dto",
     "description": "A React library for building forms using DTOs with MUI and TypeScript.",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "main": "dist/react-form-dto.umd.js",
     "module": "dist/react-form-dto.es.js",
     "types": "dist/index.d.ts",

@@ -38,6 +38,7 @@ It operates at a higher abstraction level where **layout, validation, rendering,
 - 🧩 **Extensible renderers** – plug in custom components
 - 🛡️ **Strong TypeScript typing** – safe, predictable APIs
 - 🚀 **Enterprise-ready** – optimized for large, config-driven forms
+- 🔎 **Nested condition engine** – combine AND/OR groups for powerful, multi‑field visibility rules
 
 ---
 
@@ -264,6 +265,30 @@ const profileForm: FormDTO = {
 ### Boolean Inputs
 
 - `checkbox`
+
+---
+
+## 🎭 Conditional Visibility with `visiableWhen`
+
+React Form DTO supports dynamic field visibility based on the values of other fields in the form. This is achieved through the `visiableWhen` property, which allows you to define simple conditions or complex logical expressions.
+
+### Basic Usage
+
+Show a field only when another field has a specific value:
+
+```tsx
+{
+  id: "partnerName",
+  type: "text",
+  label: "Partner Name",
+  visiableWhen: {
+    field: "maritalStatus",
+    equals: "married"
+  }
+}
+```
+
+For detail docuemtation, please visit [Docs](https://shakir-afridi.github.io/react-form-dto/docs/api/visiableWhen.html)
 
 ---
 
