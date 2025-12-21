@@ -294,7 +294,7 @@ Show a field only when another field has a specific value:
 }
 ```
 
-For detail docuemtation, please visit [Docs](https://shakir-afridi.github.io/react-form-dto/docs/api/visibleWhen.html)
+For detail documentation, please visit [Docs](https://shakir-afridi.github.io/react-form-dto/docs/api/visibleWhen.html)
 
 ---
 
