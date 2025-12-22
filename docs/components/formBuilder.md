@@ -9,6 +9,7 @@ The `FormBuilder` component dynamically renders a form based on a `FormDTO` defi
 | `dto`       | `FormDTO`                                                 | The form definition containing sections and fields.                |
 | `renderers` | `Record<string, React.ComponentType<any>>` (optional)     | Custom renderers for specific field types.                         |
 | `locale`    | `string`                                                  | Locale for localization. Default is `en`                   |
+| `handleChangeCallback` | `(id: string, value: any) => void` (optional)    | Callback invoked on every input change with field ID and value.    |
 
 ## Ref Methods (`FormBuilderHandle`)
 
