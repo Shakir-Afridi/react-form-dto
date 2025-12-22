@@ -16,7 +16,11 @@ type Errors = Record<string, string | null>;
  * form.handleChange('email', 'user@example.com');
  * const errors = form.validateAll();
  */
-export function useFormBuilder(dto: FormDTO, locale = "en") {
+export function useFormBuilder(
+    dto: FormDTO,
+    locale = "en",
+    handleChangeCallback?: (id: string, val: any) => void
+) {
     const [values, setValues] = useState<Record<string, any>>({});
     const [errors, setErrors] = useState<Errors>({});
 
@@ -29,6 +33,15 @@ export function useFormBuilder(dto: FormDTO, locale = "en") {
     const handleChange = (id: string, val: any) => {
         setValues((prev) => ({ ...prev, [id]: val }));
         setErrors((prev) => ({ ...prev, [id]: null }));
+        if (handleChangeCallback) {
+            let value = val;
+            if (Array.isArray(val)) {
+                value = val.map((v) => v.value ?? "");
+            } else if (typeof val === "object" && val !== null) {
+                value = val.value ?? "";
+            }
+            handleChangeCallback(id, value);
+        }
     };
 
     /**

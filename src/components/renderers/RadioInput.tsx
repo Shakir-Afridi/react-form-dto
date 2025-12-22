@@ -41,7 +41,7 @@ export const RadioInput: React.FC<RadioInputProps> = ({
                 {(options || []).map((option) => (
                     <FormControlLabel
                         key={option.label}
-                        value={option}
+                        value={option.value}
                         control={<Radio />}
                         label={option.label}
                         disabled={field.disabled}

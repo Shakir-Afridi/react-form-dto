@@ -31,6 +31,7 @@ type FormBuilderProps = {
     renderers?: Record<string, React.ComponentType<any>>;
     /** Current locale for i18n string resolution (default: 'en') */
     locale?: string;
+    handleChangeCallback?: (id: string, val: any) => void;
 };
 
 /**
@@ -53,7 +54,7 @@ type FormBuilderProps = {
 export const FormBuilder = React.forwardRef<
     FormBuilderHandle,
     FormBuilderProps
->(({ dto, renderers, locale = "en" }, ref) => {
+>(({ dto, renderers, locale = "en", handleChangeCallback }, ref) => {
     const {
         values,
         handleChange,
@@ -61,7 +62,7 @@ export const FormBuilder = React.forwardRef<
         getErrors,
         validateAll,
         validateField,
-    } = useFormBuilder(dto, locale);
+    } = useFormBuilder(dto, locale, handleChangeCallback);
 
     // Expose methods via ref
     useImperativeHandle(ref, () => ({
