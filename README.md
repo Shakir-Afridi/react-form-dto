@@ -146,6 +146,148 @@ return (
 
 ---
 
+## useFormBuilderController – Controlled, Auto‑Rendered Forms
+
+`useFormBuilderController` is a hook that wraps `FormBuilder` and gives you:
+
+- An auto-rendering `Form` component (no manual mapping of sections/fields)
+- An imperative controller API for values, errors, and validation
+
+It combines the convenience of `FormBuilder` with the programmatic control of `useFormBuilder`.
+
+### When to Use
+
+- You want the form UI to be generated entirely from a DTO
+- You need to:
+  - Run validation on submit
+  - Read values/errors from outside the form
+  - Prefill fields programmatically
+  - Plug in custom field renderers
+
+### Basic Example
+
+```tsx
+import { useFormBuilderController } from 'react-form-dto';
+import { myFormDTO } from './myFormDTO';
+
+function MyFormWithController() {
+  const formController = useFormBuilderController({
+    dto: myFormDTO,
+    locale: 'en',
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const errors = formController.validateAll();
+    const hasErrors = Object.values(errors).some(
+      (err) => err && err.length > 0,
+    );
+
+    if (hasErrors) {
+      console.log('Validation errors:', errors);
+      return;
+    }
+
+    console.log('Form submitted:', formController.getValues());
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      {/* Auto-renders the full form from the DTO */}
+      <formController.Form />
+      <button type="submit">Submit</button>
+    </form>
+  );
+}
+```
+
+### API Overview
+
+```ts
+const controller = useFormBuilderController({
+  dto: myFormDTO,
+  locale: 'en',
+  renderers: {
+    // optional: override field types
+    text: MyTextField,
+  },
+  handleChangeCallback: (id, value) => {
+    // optional: side effects on every field change
+    console.log(id, value);
+  },
+});
+
+// Reading and validating
+controller.getValues();        // Record<string, any>
+controller.getErrors();        // Record<string, string | null>
+controller.validateAll();      // Record<string, string[] | null>
+controller.validateField('id'); // string[]
+
+// Programmatic updates
+controller.handleChange('firstName', 'Jane');
+```
+
+### Example with Prefill and Custom Renderers
+
+```tsx
+import { useFormBuilderController } from 'react-form-dto';
+import { myFormDTO } from './myFormDTO';
+import { TextInput, SelectInput } from './customFields';
+
+const renderers = {
+  text: TextInput,
+  select: SelectInput,
+};
+
+function AdvancedForm() {
+  const formController = useFormBuilderController({
+    dto: myFormDTO,
+    locale: 'en',
+    renderers,
+    handleChangeCallback: (id, value) => {
+      // sync with external store / analytics, etc.
+      console.log('Changed:', id, value);
+    },
+  });
+
+  const prefill = () => {
+    formController.handleChange('firstName', 'John');
+    formController.handleChange('lastName', 'Doe');
+  };
+
+  return (
+    <>
+      <button type="button" onClick={prefill}>
+        Prefill
+      </button>
+
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          const errors = formController.validateAll();
+          const hasErrors = Object.values(errors).some(
+            (err) => err && err.length > 0,
+          );
+          if (!hasErrors) {
+            console.log('Values:', formController.getValues());
+          }
+        }}
+      >
+        <formController.Form />
+        <button type="submit">Submit</button>
+      </form>
+    </>
+  );
+}
+```
+
+> For the full hook reference, see  
+> **Docs → Hooks → `useFormBuilderController`**:  
+> `docs/api/hooks/useFormBuilderController.md`
+
+---
+
 ## 📋 Example Form rendered
 
 ![Form Example](./example.png)

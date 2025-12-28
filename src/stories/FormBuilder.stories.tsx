@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useFormBuilderController } from "../hooks/useFormBuilderController";
 
 export default {
     title: "Components/FormBuilder",
@@ -89,6 +90,28 @@ const defaultDTO: FormDTO = {
                         ur: "پہلا نام درج کریں",
                     },
                     layout: { cols: 4 },
+                    visibleWhen: {
+                        operator: "AND",
+                        conditions: [
+                            {
+                                field: "title",
+                                equals: "mr",
+                            },
+                            {
+                                operator: "OR",
+                                conditions: [
+                                    {
+                                        field: "age",
+                                        greaterThan: 18,
+                                    },
+                                    {
+                                        field: "country",
+                                        in: ["pk"],
+                                    },
+                                ],
+                            },
+                        ],
+                    },
                 },
                 {
                     id: "lastName",
@@ -100,6 +123,10 @@ const defaultDTO: FormDTO = {
                         ur: "آخری نام درج کریں",
                     },
                     layout: { cols: 4 },
+                    visibleWhen: {
+                        field: "firstName",
+                        notEquals: "",
+                    },
                 },
                 {
                     id: "age",
@@ -689,14 +716,8 @@ export const EditableDTO = (args: { dto: FormDTO }) => {
     const formRef = useRef<FormBuilderHandle>(null);
     const [locale, setLocale] = React.useState<string>("en");
 
-    const handleSubmit = () => {
-        const errors = formRef.current?.validateAll();
-        if (errors && Object.keys(errors).length === 0) {
-            const values = formRef.current?.getValues();
-            alert("Form submitted!\n" + JSON.stringify(values, null, 2));
-        } else {
-            alert("Validation errors:\n" + JSON.stringify(errors, null, 2));
-        }
+    const handleChangeCallback = (id: string, val: any) => {
+        console.log(`Field changed: ${id} = ${val}`);
     };
 
     return (
@@ -717,11 +738,56 @@ export const EditableDTO = (args: { dto: FormDTO }) => {
                 </Select>
             </FormControl>
             <Divider sx={{ mb: 2 }} />
-            <FormBuilder ref={formRef} dto={args.dto} locale={locale} />
+            <FormBuilder
+                ref={formRef}
+                dto={args.dto}
+                locale={locale}
+                handleChangeCallback={handleChangeCallback}
+            />
         </div>
     );
 };
 
 EditableDTO.args = {
+    dto: defaultDTO,
+};
+
+export const UsingControllerHook = (args: { dto: FormDTO }) => {
+    const [locale, setLocale] = React.useState<string>("en");
+
+    const handleChangeCallback = (id: string, val: any) => {
+        console.log("values", getValues());
+    };
+
+    const { Form, getValues } = useFormBuilderController({
+        dto: args.dto,
+        locale,
+        handleChangeCallback,
+    });
+
+    return (
+        <div>
+            <FormControl sx={{ mb: 2 }} fullWidth>
+                <InputLabel id={`label-locale`}>Select Language</InputLabel>
+                <Select
+                    labelId={`label-locale`}
+                    label="Select Language"
+                    value={locale}
+                    onChange={(e) => setLocale(e.target.value)}
+                >
+                    {["en", "fr", "ur"].map((type) => (
+                        <MenuItem key={type} value={type}>
+                            {type}
+                        </MenuItem>
+                    ))}
+                </Select>
+            </FormControl>
+            <Divider sx={{ mb: 2 }} />
+            <Form />
+        </div>
+    );
+};
+
+UsingControllerHook.args = {
     dto: defaultDTO,
 };

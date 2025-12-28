@@ -70,6 +70,7 @@ export const FormBuilder = React.forwardRef<
         getErrors,
         validateAll,
         validateField,
+        handleChange,
     }));
 
     return (

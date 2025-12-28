@@ -74,6 +74,10 @@ export default defineConfig({
                                 text: "useFormBuilder",
                                 link: "/api/hooks/useFormBuilder",
                             },
+                            {
+                                text: "useFormBuilderController",
+                                link: "/api/hooks/useFormBuilderController",
+                            },
                         ],
                     },
                 ],

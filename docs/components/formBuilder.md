@@ -13,12 +13,13 @@ The `FormBuilder` component dynamically renders a form based on a `FormDTO` defi
 
 ## Ref Methods (`FormBuilderHandle`)
 
-| Method         | Description                                                        |
-|----------------|--------------------------------------------------------------------|
-| `getValues()`  | Returns all current form values.                                   |
-| `getErrors()`  | Returns all current form errors.                                   |
-| `validateAll()`| Validates all fields and returns errors.                           |
-| `validateField(id)` | Validates a specific field by ID and returns errors.          |
+| Method             | Description                                                        |
+|--------------------|--------------------------------------------------------------------|
+| `getValues()`      | Returns all current form values.                                   |
+| `getErrors()`      | Returns all current form errors.                                   |
+| `validateAll()`    | Validates all fields and returns errors.                           |
+| `validateField(id)`| Validates a specific field by ID and returns errors.               |
+| `handleChange(id, value)` | Updates the value of a specific field by ID.                |
 
 ## Usage
 
