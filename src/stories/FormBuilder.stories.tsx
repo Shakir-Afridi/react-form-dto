@@ -343,6 +343,161 @@ const defaultDTO: FormDTO = {
     ],
 };
 
+const defaultDTOForPlayground: FormDTO = {
+    title: "User Profile",
+    description: "Fill out your personal information",
+    layout: { cols: 12, gap: "1rem" },
+    sections: [
+        {
+            id: "personal",
+            heading: "Personal Information",
+            description: "Basic details about you",
+            layout: { cols: 12, gap: "1rem" },
+            fields: [
+                {
+                    id: "title",
+                    type: "select",
+                    label: "Title",
+                    placeholder: "Select your title",
+                    options: [
+                        { value: "mr", label: "Mr" },
+                        { value: "ms", label: "Ms" },
+                        { value: "dr", label: "Dr" },
+                        { value: "prof", label: "Prof" },
+                    ],
+                    layout: { cols: 4 },
+                },
+                {
+                    id: "firstName",
+                    type: "text",
+                    label: "First Name",
+                    placeholder: "Enter first name",
+                    layout: { cols: 4 },
+                    visibleWhen: {
+                        operator: "AND",
+                        conditions: [
+                            { field: "title", equals: "mr" },
+                            {
+                                operator: "OR",
+                                conditions: [
+                                    { field: "age", greaterThan: 18 },
+                                    { field: "country", in: ["pk"] },
+                                ],
+                            },
+                        ],
+                    },
+                },
+                {
+                    id: "lastName",
+                    type: "text",
+                    label: "Last Name",
+                    placeholder: "Enter last name",
+                    layout: { cols: 4 },
+                    visibleWhen: {
+                        field: "firstName",
+                        notEquals: "",
+                    },
+                },
+                {
+                    id: "age",
+                    type: "number",
+                    label: "Age",
+                    layout: { cols: 6 },
+                },
+                {
+                    id: "dob",
+                    type: "date",
+                    label: "Date of Birth",
+                    layout: { cols: 6 },
+                },
+                {
+                    id: "gender",
+                    type: "radio",
+                    label: "Gender",
+                    options: [
+                        { value: "male", label: "Male" },
+                        { value: "female", label: "Female" },
+                        { value: "other", label: "Other" },
+                    ],
+                    validations: {
+                        required: "Please select your gender",
+                    },
+                    layout: { direction: "row" },
+                },
+                {
+                    id: "skills",
+                    type: "multi-autocomplete",
+                    label: "Skills",
+                    placeholder: "Select your skills",
+                    options: [
+                        { value: "react", label: "React" },
+                        { value: "typescript", label: "TypeScript" },
+                        { value: "node", label: "Node.js" },
+                        { value: "graphql", label: "GraphQL" },
+                        { value: "docker", label: "Docker" },
+                    ],
+                    layout: { cols: 12 },
+                    validations: {
+                        required: "Select at least one skill",
+                        validate: (val: string[]) =>
+                            val && val.length < 2
+                                ? "Pick at least 2 skills"
+                                : null,
+                    },
+                },
+                {
+                    id: "bio",
+                    type: "textarea",
+                    label: "Biography",
+                    placeholder: "Tell us about yourself...",
+                    rows: 6,
+                    validations: {
+                        required: "Biography is required",
+                        minLength: 20,
+                        maxLength: 500,
+                    },
+                    layout: { cols: 12 },
+                },
+            ],
+        },
+        {
+            id: "contact",
+            heading: "Contact Information",
+            layout: { cols: 12 },
+            fields: [
+                {
+                    id: "email",
+                    type: "email",
+                    label: "Email",
+                    validations: {
+                        required: "Email is required",
+                        pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    },
+                },
+                {
+                    id: "phone",
+                    type: "text",
+                    label: "Phone Number",
+                },
+                {
+                    id: "country",
+                    type: "autocomplete",
+                    label: "Country",
+                    placeholder: "Select a country",
+                    options: [
+                        { value: "pk", label: "Pakistan" },
+                        { value: "in", label: "India" },
+                        { value: "us", label: "USA" },
+                        { value: "uk", label: "UK" },
+                        { value: "de", label: "Germany" },
+                    ],
+                    layout: { cols: 6 },
+                },
+            ],
+        },
+    ],
+};
+
 const fieldTypes = [
     "text",
     "email",
@@ -636,25 +791,6 @@ const FormBuilderPlayground = ({ initialDTO }: { initialDTO: FormDTO }) => {
                                     sx={{ width: 60 }}
                                     inputProps={{ min: 1, max: 12 }}
                                 />
-                                {/* <Select
-                                    label="Validations"
-                                    value={field.type}
-                                    onChange={(e) =>
-                                        editField(
-                                            sectionIdx,
-                                            fieldIdx,
-                                            "validations",
-                                            e.target.value
-                                        )
-                                    }
-                                    size="small"
-                                >
-                                    {validationsOptions.map((type) => (
-                                        <MenuItem key={type} value={type}>
-                                            {type}
-                                        </MenuItem>
-                                    ))}
-                                </Select> */}
                                 {fieldTypeHasOptions(field.type) && (
                                     <TextField
                                         label="Options (comma separated)"
@@ -709,7 +845,7 @@ const FormBuilderPlayground = ({ initialDTO }: { initialDTO: FormDTO }) => {
 };
 
 export const Playground = () => (
-    <FormBuilderPlayground initialDTO={defaultDTO} />
+    <FormBuilderPlayground initialDTO={defaultDTOForPlayground} />
 );
 
 export const EditableDTO = (args: { dto: FormDTO }) => {
