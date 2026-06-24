@@ -14,9 +14,11 @@ import { useFormBuilder } from 'react-form-dto';
 
 ## Parameters
 
-| Name | Type | Description |
-|------|------|-------------|
-| `dto` | `FormDTO` | The form DTO definition containing sections and fields. |
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `dto` | `FormDTO` | — | The form DTO definition containing sections and fields. |
+| `locale` | `string` | `"en"` | Locale passed to validation messages and i18n strings. |
+| `handleChangeCallback` | `(id: string, val: any) => void` | — | Optional callback fired on every field change. Receives the normalized value (array items are mapped to their `.value` property, objects are unwrapped similarly). |
 
 ---
 

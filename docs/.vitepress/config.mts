@@ -71,6 +71,26 @@ export default defineConfig({
                         text: "Hooks",
                         items: [
                             {
+                                text: "useFormDTO",
+                                link: "/api/hooks/useFormDTO",
+                            },
+                            {
+                                text: "useForm",
+                                link: "/api/hooks/useForm",
+                            },
+                            {
+                                text: "useFormContext",
+                                link: "/api/hooks/useFormContext",
+                            },
+                            {
+                                text: "useFieldArray",
+                                link: "/api/hooks/useFieldArray",
+                            },
+                            {
+                                text: "useWatch",
+                                link: "/api/hooks/useWatch",
+                            },
+                            {
                                 text: "useFormBuilder",
                                 link: "/api/hooks/useFormBuilder",
                             },

@@ -3,7 +3,12 @@ import type { FormDTO } from "../types";
 import { Section } from "./Section";
 import { Typography } from "@mui/material";
 import { useFormBuilder } from "../hooks/useFormBuilder";
+import { useOptionalFormContext } from "../form/FormContext";
 import { resolveI18nString } from "../utils/i18n";
+import {
+    validateAll as validateAllUtil,
+    validateField as validateFieldUtil,
+} from "../utils";
 
 /**
  * Handle interface exposed by FormBuilder via ref.
@@ -36,40 +41,97 @@ type FormBuilderProps = {
 
 /**
  * FormBuilder component that dynamically renders a form based on a FormDTO definition.
- * Supports custom field renderers, validation, and programmatic access via ref.
  *
- * @example
+ * **Standalone mode** (existing behaviour, unchanged):
+ * Manage state internally and expose `getValues`, `validateAll`, etc. via a ref.
+ *
+ * **Context mode** (new):
+ * When rendered inside a `<FormProvider>` the component reads values from
+ * context and writes back through `setValue`. Errors are also stored in
+ * context so they only appear after the field is touched or `trigger()` /
+ * `handleSubmit()` is called — matching react-hook-form UX conventions.
+ *
+ * @example Standalone
  * const formRef = useRef<FormBuilderHandle>(null);
+ * <FormBuilder ref={formRef} dto={myFormDTO} />
  *
- * const handleSubmit = () => {
- *   const errors = formRef.current?.validateAll();
- *   if (Object.keys(errors || {}).length === 0) {
- *     const values = formRef.current?.getValues();
- *     // Submit form values
- *   }
- * };
- *
- * <FormBuilder ref={formRef} dto={myFormDTO} renderers={customRenderers} />
+ * @example With FormProvider (useFormDTO)
+ * const form = useFormDTO(myFormDTO);
+ * <FormProvider value={form}>
+ *   <FormBuilder dto={myFormDTO} />
+ *   <button onClick={form.handleSubmit(onSubmit)}>Submit</button>
+ * </FormProvider>
  */
 export const FormBuilder = React.forwardRef<
     FormBuilderHandle,
     FormBuilderProps
 >(({ dto, renderers, locale = "en", handleChangeCallback }, ref) => {
-    const {
-        values,
-        handleChange,
-        getValues,
-        getErrors,
-        validateAll,
-        validateField,
-    } = useFormBuilder(dto, locale, handleChangeCallback);
+    // Always call both hooks (hooks must not be conditional)
+    const ctx = useOptionalFormContext();
+    const internal = useFormBuilder(dto, locale, handleChangeCallback);
 
-    // Expose methods via ref
+    const isContextMode = Boolean(ctx);
+
+    // In context mode use context values; otherwise internal state
+    const values = isContextMode ? ctx!.values : internal.values;
+
+    const handleChange = (id: string, val: any) => {
+        if (isContextMode) {
+            // Validate on every change so the error clears as the user types
+            ctx!.setValue(id, val, true);
+            // Still fire the external callback if provided
+            if (handleChangeCallback) {
+                let resolved = val;
+                if (Array.isArray(val)) {
+                    resolved = val.map((v) => v.value ?? "");
+                } else if (typeof val === "object" && val !== null) {
+                    resolved = val.value ?? "";
+                }
+                handleChangeCallback(id, resolved);
+            }
+        } else {
+            internal.handleChange(id, val);
+        }
+    };
+
+    // In context mode errors live in context (updated on change / trigger).
+    // In standalone mode we run DTO validation live on every render.
+    const getFieldErrors = (id: string): string[] => {
+        if (isContextMode && ctx) {
+            const err = (ctx.errors as Record<string, string | null | undefined>)[id];
+            return err ? [err] : [];
+        }
+        return internal.validateField(id);
+    };
+
     useImperativeHandle(ref, () => ({
-        getValues,
-        getErrors,
-        validateAll,
-        validateField,
+        getValues: () => (isContextMode ? ctx!.getValues() : internal.getValues()),
+        getErrors: () =>
+            isContextMode
+                ? (ctx!.errors as Record<string, string | null>)
+                : internal.getErrors(),
+        validateAll: () => {
+            const errors = validateAllUtil(dto, values, locale);
+            if (isContextMode) {
+                // Push DTO errors into context so the UI updates
+                dto.sections.flatMap((s) => s.fields).forEach((f) => {
+                    const errs = errors[f.id];
+                    if (errs?.length) {
+                        ctx!.setError(f.id, errs[0]);
+                    } else {
+                        ctx!.clearError(f.id);
+                    }
+                });
+            }
+            return errors;
+        },
+        validateField: (id: string) => {
+            const errs = validateFieldUtil(dto, values, id, locale);
+            if (isContextMode) {
+                ctx!.setError(id, errs[0] ?? null);
+            }
+            return errs;
+        },
         handleChange,
     }));
 
@@ -111,7 +173,7 @@ export const FormBuilder = React.forwardRef<
                     values={values}
                     onChange={handleChange}
                     renderers={renderers}
-                    validateField={validateField}
+                    validateField={getFieldErrors}
                     locale={locale}
                 />
             ))}

@@ -1,7 +1,7 @@
 {
     "name": "react-form-dto",
     "description": "A React library for building forms using DTOs with MUI and TypeScript.",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "main": "dist/react-form-dto.umd.js",
     "module": "dist/react-form-dto.es.js",
     "types": "dist/index.d.ts",
@@ -25,11 +25,13 @@
         "react-dom": ">=17"
     },
     "devDependencies": {
+        "@storybook/react": "^10.3.6",
         "@types/node": "^24.10.1",
         "@types/react": "^19.2.7",
         "@types/react-dom": "^19.2.3",
         "@vitejs/plugin-react": "^5.1.1",
         "eslint": "^9.39.1",
+        "storybook": "^10.3.6",
         "typescript": "~5.9.3",
         "typescript-eslint": "^8.46.4",
         "vite": "^7.2.4",
@@ -55,8 +57,6 @@
         "@emotion/react": "^11.14.0",
         "@emotion/styled": "^11.14.1",
         "@mui/icons-material": "^7.3.6",
-        "@storybook/react": "^10.1.4",
-        "@storybook/react-vite": "^10.1.4",
-        "storybook": "^10.1.4"
+        "@storybook/react-vite": "^10.1.4"
     }
 }
