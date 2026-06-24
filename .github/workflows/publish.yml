@@ -16,19 +16,16 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: "20" # Set Node.js version
+          node-version: "20"
           registry-url: "https://registry.npmjs.org/"
 
       - name: Install dependencies
         run: npm ci
 
       - name: Build package
-        run: npm run build # Make sure your package.json has a build script
-
-      - name: Authenticate with npm
-        run: npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
+        run: npm run build
 
       - name: Publish package
         run: npm publish
