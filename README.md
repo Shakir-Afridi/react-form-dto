@@ -18,14 +18,14 @@ It is designed for **schema-driven UIs**, backend-configured workflows, admin pa
 Most form libraries solve **state management**.  
 React Form DTO solves **form architecture**.
 
-It operates at a higher abstraction level where **layout, validation, rendering, and behavior** are defined in a single schema.
+It operates at a higher abstraction level where **layout, validation, rendering, and behavior** are defined in a single schema — with a react-hook-form–style hook API to manage state and submission.
 
 ### Use this library when:
 
 - Forms are generated from backend schemas or configuration APIs
 - UI logic must be reused across multiple applications
 - Forms are large, dynamic, or conditional
-- You need imperative control (wizards, modals, async flows)
+- You need reactive watches, field arrays, or context-driven child components
 - Your design system is based on Material UI
 
 ### Key Advantages
@@ -33,7 +33,7 @@ It operates at a higher abstraction level where **layout, validation, rendering,
 - 📄 **DTO-first design** – define forms entirely in JSON or TypeScript
 - 🎨 **Material UI v7 native** – accessibility and consistency by default
 - 🧱 **Composable structure** – Form → Section → Field
-- 🎯 **Imperative API** – programmatic control via refs
+- 🪝 **Hook-based API** – `useFormDTO`, `useForm`, `useWatch`, `useFieldArray`, `useFormContext`
 - 🔀 **Conditional rendering** – dynamic visibility and logic
 - 🧩 **Extensible renderers** – plug in custom components
 - 🛡️ **Strong TypeScript typing** – safe, predictable APIs
@@ -48,12 +48,12 @@ It operates at a higher abstraction level where **layout, validation, rendering,
 |------|---------------|----------------|--------|
 | Schema / DTO driven | ✅ Native | ❌ Manual | ❌ Manual |
 | MUI-first | ✅ Yes | ⚠️ Partial | ⚠️ Partial |
-| Imperative API | ✅ First-class | ⚠️ Limited | ⚠️ Limited |
+| Hook-based API | ✅ First-class | ✅ Yes | ⚠️ Partial |
 | Large dynamic forms | ✅ Excellent | ⚠️ Medium | ❌ Poor |
 | Boilerplate | ✅ Minimal | ❌ High | ❌ High |
 
 > **Note:** React Form DTO is **not a replacement** for React Hook Form.  
-> It is a **higher-level abstraction** for schema-driven UI generation.
+> It is a **higher-level abstraction** for schema-driven UI generation, with a familiar hook API on top.
 
 ---
 
@@ -103,188 +103,216 @@ See [CHANGELOG.md](./.github/CHANGELOG.md) for detailed version history.
 
 ### DTO as Source of Truth
 
-All structure, layout, validation, and behavior live in a single schema.
+All structure, layout, validation, and behavior live in a single schema object. Define it once — the library handles the rest.
 
-### Stateless Rendering
+### Hook-based State Management
 
-The UI is derived entirely from the DTO and internal state.
-
-### Imperative Escape Hatch
-
-Refs enable workflows that declarative-only approaches struggle with.
+`useFormDTO` bridges the schema into a react-hook-form–style context. Any component inside `<FormProvider>` can read values, watch fields, and access errors without prop-drilling.
 
 ### Renderer Isolation
 
-Field logic is decoupled from presentation, enabling customization.
+Field logic is decoupled from presentation, enabling full customization via the `renderers` prop.
+
+### Imperative Escape Hatch
+
+A ref-based API (`FormBuilderHandle`) is available for scenarios that need programmatic control outside the React tree.
+
+---
 
 ## Quick Start
 
-```tsx
-import { FormBuilder, type FormBuilderHandle } from 'react-form-dto';
-import { useRef } from 'react';
-import { myFormDTO } from './myFormDTO';
+### 1 — Define a FormDTO
 
-const formRef = useRef<FormBuilderHandle>(null);
+```ts
+import type { FormDTO } from 'react-form-dto';
 
-const handleSubmit = (e) => {
-  e.preventDefault();
-  if (!formRef.current) return;
-  const values = formRef.current.getValues();
-  const errors = formRef.current.validateAll();
-  formRef.current.handleChange?.("firstName", "NewName");
-  const firstNameErrors = formRef.current.validateField("firstName");
-  const allErrors = formRef.current.getErrors();
+const profileForm: FormDTO = {
+  title: "User Profile",
+  sections: [
+    {
+      id: "personal",
+      heading: "Personal Information",
+      fields: [
+        {
+          id: "firstName",
+          type: "text",
+          label: "First Name",
+          layout: { cols: 6 },
+          validations: { required: "First name is required" },
+        },
+        {
+          id: "lastName",
+          type: "text",
+          label: "Last Name",
+          layout: { cols: 6 },
+          validations: { required: "Last name is required" },
+        },
+        {
+          id: "email",
+          type: "email",
+          label: "Email",
+          validations: {
+            required: "Email is required",
+            pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+          },
+        },
+      ],
+    },
+  ],
 };
+```
 
-return (
-  <form onSubmit={handleSubmit}>
-    <FormBuilder ref={formRef} dto={myFormDTO} />
-    <button type="submit">Submit</button>
-  </form>
-);
+### 2 — Render with FormProvider
+
+Pass the DTO to `useFormDTO`, wrap in `<FormProvider>`, and render with `<FormBuilder>`. `form.handleSubmit` validates all fields before calling your callback.
+
+```tsx
+import { FormBuilder, FormProvider, useFormDTO } from 'react-form-dto';
+import { profileForm } from './profileForm';
+
+export function ProfilePage() {
+  const form = useFormDTO(profileForm);
+
+  const onSubmit = (data: Record<string, any>) => {
+    console.log('Submitted:', data);
+  };
+
+  return (
+    <FormProvider value={form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <FormBuilder dto={profileForm} />
+        <button type="submit">Submit</button>
+      </form>
+    </FormProvider>
+  );
+}
+```
+
+`useFormDTO` automatically extracts default values and wires all `validations` rules from the DTO into the form context. Errors appear after a field is touched — not on initial load.
+
+### 3 — Read state from child components
+
+Any component inside `<FormProvider>` can subscribe to form state:
+
+```tsx
+import { useWatch, useFormContext } from 'react-form-dto';
+
+function LiveGreeting() {
+  const firstName = useWatch('firstName');
+  return <p>Hello, {firstName || 'stranger'}!</p>;
+}
+
+function SubmitButton() {
+  const { errors } = useFormContext();
+  const hasErrors = Object.values(errors).some(Boolean);
+  return <button type="submit" disabled={hasErrors}>Submit</button>;
+}
 ```
 
 ---
 
-## useFormBuilderController – Controlled, Auto‑Rendered Forms
+## Hooks
 
-`useFormBuilderController` is a hook that wraps `FormBuilder` and gives you:
+| Hook | Description |
+|------|-------------|
+| `useFormDTO(dto, options?)` | Creates a form instance bound to a `FormDTO`. Extracts defaults and wires all validations automatically. |
+| `useForm(options?)` | Lower-level hook for plain (non-DTO) forms with a react-hook-form–style API. |
+| `useFormContext()` | Reads the form instance from the nearest `<FormProvider>`. Throws if no provider found. |
+| `useOptionalFormContext()` | Like `useFormContext` but returns `undefined` instead of throwing. |
+| `useWatch(name)` | Reactively reads one or more field values. Re-renders on change. |
+| `useFieldArray({ name })` | Manages an array field — `fields`, `append`, `prepend`, `remove`, `swap`, `insert`. |
+| `useFormBuilderController(props)` | Wraps `FormBuilder` in a ref-based controller. Returns a `Form` component + imperative API. |
+| `useFormBuilder(dto)` | Low-level hook that manages raw form state without a provider. |
 
-- An auto-rendering `Form` component (no manual mapping of sections/fields)
-- An imperative controller API for values, errors, and validation
+---
 
-It combines the convenience of `FormBuilder` with the programmatic control of `useFormBuilder`.
+## Validation
 
-### When to Use
+Validation rules live on each field's `validations` object and are run automatically by `handleSubmit` or on demand via `trigger()`.
 
-- You want the form UI to be generated entirely from a DTO
-- You need to:
-  - Run validation on submit
-  - Read values/errors from outside the form
-  - Prefill fields programmatically
-  - Plug in custom field renderers
+```ts
+{
+  id: "email",
+  type: "email",
+  label: "Email",
+  validations: {
+    required: "Email is required",
+    pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+    minLength: 5,
+    maxLength: 100,
+  },
+}
+```
 
-### Basic Example
+### Built-in rules
+
+| Rule | Type | Description |
+|------|------|-------------|
+| `required` | `boolean \| string` | Field must not be empty. |
+| `minLength` | `number` | Minimum string length. |
+| `maxLength` | `number` | Maximum string length. |
+| `min` | `number` | Minimum numeric value. |
+| `max` | `number` | Maximum numeric value. |
+| `pattern` | `RegExp` | Must match regex. |
+| `validate` | `(value, allValues) => string \| null` | Custom function. |
+
+### Validate programmatically
+
+```ts
+const isValid = form.trigger();         // validate all fields
+const emailOk = form.trigger('email');  // validate one field
+```
+
+### Inject server errors
+
+```ts
+const onSubmit = async (data) => {
+  try {
+    await api.save(data);
+  } catch {
+    form.setError('email', 'This email is already taken');
+  }
+};
+```
+
+---
+
+## useFormBuilderController — Quick drop-in
+
+For cases where you want the full form rendered from a DTO with an external imperative API and no `FormProvider` setup:
 
 ```tsx
 import { useFormBuilderController } from 'react-form-dto';
-import { myFormDTO } from './myFormDTO';
+import { profileForm } from './profileForm';
 
-function MyFormWithController() {
-  const formController = useFormBuilderController({
-    dto: myFormDTO,
-    locale: 'en',
-  });
+function MyForm() {
+  const ctrl = useFormBuilderController({ dto: profileForm, locale: 'en' });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    const errors = formController.validateAll();
-    const hasErrors = Object.values(errors).some(
-      (err) => err && err.length > 0,
-    );
-
-    if (hasErrors) {
-      console.log('Validation errors:', errors);
-      return;
+    const errors = ctrl.validateAll();
+    if (Object.values(errors).every((e) => !e?.length)) {
+      console.log(ctrl.getValues());
     }
-
-    console.log('Form submitted:', formController.getValues());
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      {/* Auto-renders the full form from the DTO */}
-      <formController.Form />
+      <ctrl.Form />
       <button type="submit">Submit</button>
     </form>
   );
 }
 ```
 
-### API Overview
-
-```ts
-const controller = useFormBuilderController({
-  dto: myFormDTO,
-  locale: 'en',
-  renderers: {
-    // optional: override field types
-    text: MyTextField,
-  },
-  handleChangeCallback: (id, value) => {
-    // optional: side effects on every field change
-    console.log(id, value);
-  },
-});
-
-// Reading and validating
-controller.getValues();        // Record<string, any>
-controller.getErrors();        // Record<string, string | null>
-controller.validateAll();      // Record<string, string[] | null>
-controller.validateField('id'); // string[]
-
-// Programmatic updates
-controller.handleChange('firstName', 'Jane');
-```
-
-### Example with Prefill and Custom Renderers
-
-```tsx
-import { useFormBuilderController } from 'react-form-dto';
-import { myFormDTO } from './myFormDTO';
-import { TextInput, SelectInput } from './customFields';
-
-const renderers = {
-  text: TextInput,
-  select: SelectInput,
-};
-
-function AdvancedForm() {
-  const formController = useFormBuilderController({
-    dto: myFormDTO,
-    locale: 'en',
-    renderers,
-    handleChangeCallback: (id, value) => {
-      // sync with external store / analytics, etc.
-      console.log('Changed:', id, value);
-    },
-  });
-
-  const prefill = () => {
-    formController.handleChange('firstName', 'John');
-    formController.handleChange('lastName', 'Doe');
-  };
-
-  return (
-    <>
-      <button type="button" onClick={prefill}>
-        Prefill
-      </button>
-
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          const errors = formController.validateAll();
-          const hasErrors = Object.values(errors).some(
-            (err) => err && err.length > 0,
-          );
-          if (!hasErrors) {
-            console.log('Values:', formController.getValues());
-          }
-        }}
-      >
-        <formController.Form />
-        <button type="submit">Submit</button>
-      </form>
-    </>
-  );
-}
-```
-
-> For the full hook reference, see  
-> **Docs → Hooks → `useFormBuilderController`**:  
-> `docs/api/hooks/useFormBuilderController.md`
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `getValues()` | `Record<string, any>` | All current field values. |
+| `getErrors()` | `Record<string, string \| null>` | Current error state. |
+| `validateAll()` | `Record<string, string[]>` | Validates every field. |
+| `validateField(id)` | `string[]` | Validates one field. |
+| `handleChange(id, val)` | `void` | Programmatically set a field value. |
+| `Form` | `() => JSX.Element` | Auto-rendered form component. |
 
 ---
 
@@ -292,19 +320,19 @@ function AdvancedForm() {
 
 ![Form Example](./example.png)
 
-The form in the image above is generated from this DTO.
+The form in the image above is generated from this DTO:
 
 ```tsx
 const profileForm: FormDTO = {
     title: "User Profile",
     description: "Fill out your personal information",
-    layout: { cols: 12, gap: "1rem" }, // global form layout
+    layout: { cols: 12, gap: "1rem" },
     sections: [
         {
             id: "personal",
             heading: "Personal Information",
             description: "Basic details about you",
-            layout: { cols: 12, gap: "1rem" }, // section layout
+            layout: { cols: 12, gap: "1rem" },
             fields: [
                 {
                     id: "title",
@@ -343,20 +371,12 @@ const profileForm: FormDTO = {
                     type: "multi-autocomplete",
                     label: "Skills",
                     placeholder: "Select your skills",
-                    options: [
-                        "React",
-                        "TypeScript",
-                        "Node.js",
-                        "GraphQL",
-                        "Docker",
-                    ],
+                    options: ["React", "TypeScript", "Node.js", "GraphQL", "Docker"],
                     layout: { cols: 12 },
                     validations: {
                         required: "Select at least one skill",
                         validate: (val: string[]) =>
-                            val && val.length < 2
-                                ? "Pick at least 2 skills"
-                                : null,
+                            val && val.length < 2 ? "Pick at least 2 skills" : null,
                     },
                 },
             ],
@@ -418,11 +438,7 @@ const profileForm: FormDTO = {
 
 ## 🎭 Conditional Visibility with `visibleWhen`
 
-React Form DTO supports dynamic field visibility based on the values of other fields in the form. This is achieved through the `visibleWhen` property, which allows you to define simple conditions or complex logical expressions.
-
-### Basic Usage
-
-Show a field only when another field has a specific value:
+React Form DTO supports dynamic field visibility based on the values of other fields. Define simple conditions or complex AND/OR groups:
 
 ```tsx
 {
@@ -436,188 +452,60 @@ Show a field only when another field has a specific value:
 }
 ```
 
-For detail documentation, please visit [Docs](https://shakir-afridi.github.io/react-form-dto/docs/api/visibleWhen.html)
+For full documentation see [Docs → visibleWhen](https://shakir-afridi.github.io/react-form-dto/docs/api/visibleWhen.html).
 
 ---
 
 ## 🌍 Internationalization (I18n)
 
-React Form DTO has built-in support for multi-language forms through `I18String` and `I18nOption` types.
-
-### Using I18String
-
-Any text property (`label`, `placeholder`, `title`, `description`, validation messages) can be either a plain string or a locale map:
+Any text property (`label`, `placeholder`, `title`, `description`, validation messages) can be a plain string or a locale map:
 
 ```tsx
-// Simple string (single language)
-{
-  label: "First Name"
-}
-
-// Multi-language support
 {
   label: {
     en: "First Name",
     fr: "Prénom",
-    es: "Nombre",
     de: "Vorname"
+  },
+  validations: {
+    required: {
+      en: "First name is required",
+      fr: "Le prénom est obligatoire"
+    }
   }
 }
 ```
 
-### Using I18nOption for Selections
+Pass `locale` to `useFormDTO` to resolve messages:
 
-For select, autocomplete, and multi-autocomplete fields, you can use `I18nOption` objects to provide translatable labels while maintaining stable values:
-
-```tsx
-{
-  id: "country",
-  type: "select",
-  label: { en: "Country", fr: "Pays" },
-  options: [
-    {
-      value: "us",
-      label: { en: "United States", fr: "États-Unis" }
-    },
-    {
-      value: "fr",
-      label: { en: "France", fr: "France" }
-    },
-    {
-      value: "de",
-      label: { en: "Germany", fr: "Allemagne" }
-    }
-  ]
-}
+```ts
+const form = useFormDTO(myDTO, { locale: 'fr' });
 ```
 
-**Backward Compatibility:** Simple string arrays still work:
+For select/autocomplete fields, use `I18nOption` objects for translatable option labels:
 
 ```tsx
-options: ["USA", "France", "Germany"] // Still supported
+options: [
+  { value: "us", label: { en: "United States", fr: "États-Unis" } },
+  { value: "de", label: { en: "Germany", fr: "Allemagne" } }
+]
 ```
-
-### I18n Validation Messages
-
-Validation messages also support I18n:
-
-```tsx
-validations: {
-  required: {
-    en: "This field is required",
-    fr: "Ce champ est obligatoire",
-    es: "Este campo es obligatorio"
-  },
-  validate: (value) => value.length < 2 
-    ? { 
-        en: "Minimum 2 characters",
-        fr: "Minimum 2 caractères" 
-      }
-    : null
-}
-```
-
-### Complete I18n Example
-
-```tsx
-const multilingualForm: FormDTO = {
-  title: {
-    en: "User Registration",
-    fr: "Inscription de l'utilisateur",
-    es: "Registro de Usuario"
-  },
-  description: {
-    en: "Please fill in your details",
-    fr: "Veuillez remplir vos coordonnées",
-    es: "Por favor complete sus datos"
-  },
-  sections: [
-    {
-      id: "personal",
-      heading: {
-        en: "Personal Information",
-        fr: "Informations personnelles",
-        es: "Información Personal"
-      },
-      fields: [
-        {
-          id: "title",
-          type: "select",
-          label: { en: "Title", fr: "Titre", es: "Título" },
-          options: [
-            { value: "mr", label: { en: "Mr", fr: "M.", es: "Sr." } },
-            { value: "ms", label: { en: "Ms", fr: "Mme", es: "Sra." } },
-            { value: "dr", label: { en: "Dr", fr: "Dr", es: "Dr." } }
-          ]
-        },
-        {
-          id: "firstName",
-          type: "text",
-          label: { en: "First Name", fr: "Prénom", es: "Nombre" },
-          placeholder: { 
-            en: "Enter your first name",
-            fr: "Entrez votre prénom",
-            es: "Ingrese su nombre"
-          },
-          validations: {
-            required: {
-              en: "First name is required",
-              fr: "Le prénom est obligatoire",
-              es: "El nombre es obligatorio"
-            }
-          }
-        }
-      ]
-    }
-  ]
-};
-```
-
-> **Note:** The library provides the I18n structure. You'll need to implement locale selection and text resolution in your application layer.
 
 ---
 
 ## Custom Field Renderers
 
-Override any default renderer by supplying your own component:
+Override any default renderer by supplying your own component via the `renderers` prop:
 
-```ts
-{
-  id: "salary",
-  type: "number",
-  label: "Salary",
-  renderer: CurrencyInput
-}
+```tsx
+<FormBuilder dto={myDTO} renderers={{ text: MyTextField, select: MySelect }} />
 ```
 
-This makes the library extensible without modifying core logic.
-
----
-
-## Validation API
-
-Validation is handled through the `useFormBuilder` hook and the imperative form handle.
+Or pass them through `useFormBuilderController`:
 
 ```ts
-const {
-  handleChange,   // Function to update a field value: (id, value) => void
-  validateAll,    // Function to validate all fields: () => Record<string, string[]>
-  getValues,      // Function to get all current form values: () => Record<string, any>
-  getErrors,      // Function to get all current form errors: () => Record<string, string | null>
-  validateField,  // Function to validate a specific field: (id) => string[]
-} = useFormBuilder(myFormDTO);
+const ctrl = useFormBuilderController({ dto: myDTO, locale: 'en', renderers: { text: MyTextField } });
 ```
-
-### Validation Rules
-
-```ts
-validations: {
-  required: "This field is required",
-  validate: (value) => value.length < 2 ? "Minimum 2 characters" : null
-}
-```
-
-> Recommendation: Standardize validation return values to `string[]` for predictable handling in large applications.
 
 ---
 
@@ -678,11 +566,11 @@ This enables:
 Contributions are welcome and encouraged.
 
 1. Fork the repository
-2. Create a feature branch
+2. Create a feature branch  
    `git checkout -b feature/my-feature`
-3. Commit your changes
+3. Commit your changes  
    `git commit -m "Add my feature"`
-4. Push to the branch
+4. Push to the branch  
    `git push origin feature/my-feature`
 5. Open a Pull Request
 
@@ -696,4 +584,4 @@ MIT
 
 ---
 
-**React Form DTO — Schema-first forms for Material UI**
+## React Form DTO — Schema-first forms for Material UI
